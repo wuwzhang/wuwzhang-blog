@@ -5,6 +5,8 @@ tags: ['note', 'typescript']
 draft: false
 ---
 
+<TOCInline toc={props.toc} asDisclosure toHeading={3} />
+
 ## 什么是 ts
 
 TypeScript 是 JavaScript 的类型的超集，支持 ES6 语法，支持面向对象编程的概念，如类、接口、继承、泛型等
