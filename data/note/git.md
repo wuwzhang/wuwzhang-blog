@@ -20,12 +20,12 @@ draft: false
 
 - git init 初始化仓库，默认为 master 分支
 - git add . 提交全部文件修改到缓存区
-- git add <具体某个文件路径+全名> 提交某些文件到缓存区
+- git add `<具体某个文件路径+全名>` 提交某些文件到缓存区
 - git diff 查看当前代码 add 后，会 add 哪些内容
 - git diff --staged 查看现在 commit 提交后，会提交哪些内容
 - git status 查看当前分支状态
-- git pull <远程仓库名> <远程分支名> 拉取远程仓库的分支与本地当前分支合并
-- git pull <远程仓库名> <远程分支名>:<本地分支名> 拉取远程仓库的分支与本地某个分支合并
+- git pull `<远程仓库名> <远程分支名>` 拉取远程仓库的分支与本地当前分支合并
+- git pull `<远程仓库名> <远程分支名>:<本地分支名>` 拉取远程仓库的分支与本地某个分支合并
 - git commit -m "<注释>" 提交代码到本地仓库，并写提交注释
 - git commit -v 提交时显示所有 diff 信息
 - git commit --amend [file1] [file2] 重做上一次 commit，并包括指定文件的新变化
@@ -45,17 +45,17 @@ draft: false
 - git branch 查看本地所有分支
 - git branch -r 查看远程所有分支
 - git branch -a 查看本地和远程所有分支
-- git merge <分支名> 合并分支
+- git merge `<分支名>` 合并分支
 - git merge --abort 合并分支出现冲突时，取消合并，一切回到合并前的状态
-- git branch <新分支名> 基于当前分支，新建一个分支
+- git branch `<新分支名>` 基于当前分支，新建一个分支
 - git checkout --orphan <新分支名> 新建一个空分支（会保留之前分支的所有文件）
-- git branch -D <分支名> 删除本地某个分支
-- git push <远程库名> :<分支名> 删除远程某个分支
-- git branch <新分支名称> <提交 ID> 从提交历史恢复某个删掉的某个分支
-- git branch -m <原分支名> <新分支名> 分支更名
-- git checkout <分支名> 切换到本地某个分支
-- git checkout <远程库名>/<分支名> 切换到线上某个分支
-- git checkout -b <新分支名> 把基于当前分支新建分支，并切换为这个分支
+- git branch -D `<分支名>` 删除本地某个分支
+- git push `<远程库名> :<分支名>` 删除远程某个分支
+- git branch `<新分支名称> <提交 ID>` 从提交历史恢复某个删掉的某个分支
+- git branch -m `<原分支名> <新分支名>` 分支更名
+- git checkout `<分支名>` 切换到本地某个分支
+- git checkout `<远程库名>/<分支名>` 切换到线上某个分支
+- git checkout -b `<新分支名>` 把基于当前分支新建分支，并切换为这个分支
 
 ### 远程同步
 
