@@ -12,7 +12,7 @@ summary: 正则表达式(regular expression)描述了一种字符串匹配的模
 
 简单说: 对字符串的增加删改查
 
-## \* 1、感受正则的魅力
+## 1、感受正则的魅力
 
 > - g 全局匹配
 > - i 忽略大小写
@@ -35,7 +35,7 @@ console.log(numbs.join(''))
 console.log(time.join('') === numbs.join('')) // true
 ```
 
-## \* 2、字面量方式创建正则表达式
+## 2、字面量方式创建正则表达式
 
 ```js
 let title = 'heiqiu'
@@ -47,7 +47,7 @@ let reg = /q/
 console.log(reg.test(title)) // true
 ```
 
-## \* 3、对象方式创建正则表达式
+## 3、对象方式创建正则表达式
 
 ```js
 let title = 'heiqiu'
@@ -71,7 +71,7 @@ let tel = '020-9999999'
 console.log(/(010|020)-\d{7,8}/.test(tel))
 ```
 
-## \* 5、原子表和原子组选择符
+## 5、原子表和原子组选择符
 
 > - [] 中括号表示原子表
 > - () 小括号表示原子组
@@ -89,7 +89,7 @@ console.log(title.match(reg)) //  ["1", "2", "3"]
 console.log(title.match(reg2)) //  ["123"]
 ```
 
-## \* 6、正则表达式中的转义符
+## 6、正则表达式中的转义符
 
 > - \ 斜杠表示转义符
 > - \d 阿拉伯数字
@@ -131,7 +131,7 @@ console.log(numreg.test(numb)) // true
 > - \s, 小写的 s 表示匹配空格
 > - \S, 大写的 S 表示匹配除了空格
 > - \+ 号匹配 1 个或多个字符
-> - {x，y} 匹配 x 到 y 个字符
+> - `{x,y}` 匹配 x 到 y 个字符
 
 ```js
 let tel = `李四：010-56948754，张三：020-23522222`
@@ -165,7 +165,7 @@ console.log(email.match(emailreg))
 console.log(emailreg.test(email))
 ```
 
-## \* 10、点元字符使用
+## 10、点元字符使用
 
 > - . 表示除了换行符以外的字符
 
@@ -182,7 +182,7 @@ console.log(title.match(/.+/))
 console.log(title.match(/.+/s))
 ```
 
-## \* 11、如何精巧匹配所有字符
+## 11、如何精巧匹配所有字符
 
 > - [\s\S] 匹配空格和不是空格，两个都加上表示所有
 > - [\d\D] 匹配数字和不是数字，两个都加上表示所有
@@ -219,11 +219,11 @@ let time = '2020/11/10'
 console.log(time.replace(/\//g, '-'))
 ```
 
-## \* 13、m 多行匹配修正符
+## 13、m 多行匹配修正符
 
 > - m 多行匹配,即每一行单独处理
 
-需求：格式化 [{name:'js',price:'200 元'}]
+需求：`格式化 [{name:'js',price:'200 元'}]`
 
 ```js
 let lessonObj = `
@@ -242,7 +242,7 @@ let lessons = filterLesson.map((v) => {
 console.log(JSON.stringify(lessons, null, 2))
 ```
 
-#### \* 14、汉字和字符属性
+#### 14、汉字和字符属性
 
 ```js
 let name = 'hello,你好中国,upup....加油！！！'
@@ -259,7 +259,7 @@ let hanzi = name.match(/[\u4e00-\u9fff]+/g)
 console.log(hanzi) // ["你好中国", "加油"]
 ```
 
-#### \* 15、lastIndex 属性的使用
+#### 15、lastIndex 属性的使用
 
 ```js
 let name = 'heiqiu1'
@@ -277,7 +277,7 @@ while ((res = reg.exec(name))) {
 }
 ```
 
-#### \* 16、有效率的 y 模式
+#### 16、有效率的 y 模式
 
 > - y 模式表示匹配到不符合的就停掉，不会继续往后匹配，必须连续的符合条件的
 
@@ -297,7 +297,7 @@ while ((res = reg.exec(name))) {
 console.log(qqList) // ["1111111111", "22224545488", "6411313416544"]
 ```
 
-#### \* 17、原子表的基本使用
+#### 17、原子表的基本使用
 
 > - [] 原子表表示里面的内容时或者的关系,检测的内容在其中就可以被匹配到
 
@@ -330,7 +330,7 @@ let objreg = /[a-z]+/g
 console.log(a.match(objreg)) // ["a", "b", "c"]
 ```
 
-#### \* 19、排除匹配
+#### 19、排除匹配
 
 ```js
 let name = 'heiqiu'
@@ -339,7 +339,7 @@ let reg = /[^iu]+/g
 console.log(name.match(reg))
 ```
 
-#### \* 20、原子表里的字符不会解析
+#### 20、原子表里的字符不会解析
 
 ```js
 let name = '(heiqiu).+'
@@ -359,7 +359,7 @@ function trimreg(data) {
 console.log(trimreg(title)) // 111233
 ```
 
-#### \* 22、认识原子组
+#### 22、认识原子组
 
 > - 一个小括号包起来的东西被称为原子组，\1 表示与第一个原子组相同的内容
 
@@ -380,7 +380,7 @@ console.log(title.match(reg))
 
 #### 23、邮箱验证使用原子组
 
-> - 验证邮箱表达式：/\^\[\da-z][\w.]+@(\w+.)+(com|cn|org)$/i
+> - 验证邮箱表达式：`/\^\[\da-z][\w.]+@(\w+.)+(com|cn|org)$/i`
 > - 含义：以数字或者字母开头，数字字母下划线为主体，一个 @符号，后面跟上数字字母下划线和小数点，可以为多个，以 com 或 cn 或 org 结尾
 
 ```js
@@ -395,7 +395,7 @@ let emailreg = /^[\da-z][\w.]+@(\w+\.)+(com|cn|org)$/i
 console.log(emailreg.test(mailAdd))
 ```
 
-#### \* 24、嵌套分组和不记录分组
+#### 24、嵌套分组和不记录分组
 
 > - 原子组里面加上?: 表示不记录该原子组，但是原子组的功能仍然生效
 
@@ -417,12 +417,12 @@ while ((res = reg.exec(urlStr))) {
 console.log(urls) // ["www.baidu.com", "taobao.cn", "www.zhifubao.com"]
 ```
 
-#### \* 25、重复匹配的使用
+#### 25、重复匹配的使用
 
 > - +：一个或者多个
-> - \*：零个或者多个
+> - `\*`：零个或者多个
 > - ?: 有或者没有
-> - {1,2}：一个到两个，最少一个，最多 2 连个，数字随便定义
+> - `{1,2}`：一个到两个，最少一个，最多 2 连个，数字随便定义
 
 ```js
 let name = 'sooooo'
@@ -439,7 +439,7 @@ console.log(name.match(/so?/)) // so
 console.log(name.match(/so{1,2}/)) // soo
 ```
 
-#### \* 26、禁止贪婪
+#### 26、禁止贪婪
 
 > - ? 禁止贪婪，会匹配最小的那个单位
 
@@ -463,7 +463,7 @@ reg = /so{2,5}?/g
 console.log(name.match(reg)) // ["soo"]
 ```
 
-#### \* 27、使用 matchAll 完成全局匹配
+#### 27、使用 matchAll 完成全局匹配
 
 > - matchAll 获取到的是一个迭代对象，可以被遍历到
 
@@ -505,9 +505,9 @@ let reg = /https?:\/\/(\w+)?(\w+\.)+(com|cn)/g
 console.log(urls.match(reg))
 ```
 
-#### \* 29、$ 符在正则替换中的使用
+#### 29、$ 符在正则替换中的使用
 
-> - $ : $n 代表原子组
+> - $ : `$n` 代表原子组
 > - $` : 获取替换元素左边的元素
 > - $' : 获取替换元素右边的元素
 > - $& : 获取替换元素本身
@@ -527,8 +527,8 @@ console.log(name.replace('你好', "$`$&$'")) // 123123你好++++++
 
 #### 30、原子组起别名
 
-> - 使用 ?<xx> 起原子组的别名
-> - 使用 $<xx> 读取别名
+> - `使用 ?<xx> 起原子组的别名`
+> - `使用 $<xx> 读取别名`
 
 ```js
 let html = `<h2>百度</h2>
@@ -541,7 +541,7 @@ let newHtml = html.replace(reg, `<i>$<text></i>`)
 console.log(newHtml)
 ```
 
-#### \* 31、后等断言
+#### 31、后等断言
 
 > - (?=xxx) 匹配右侧是 xxx 的字段
 
@@ -556,9 +556,9 @@ let str2 = /猫(?=土豆)/g
 console.log(title.replace(str1, '黑猫').replace(str2, '灰猫'))
 ```
 
-#### \* 32、前等断言
+#### 32、前等断言
 
-> - (?<=href=(['"])) 前面是 href = 单引号或者双引号的字段
+> - `(?<=href=(['"])) 前面是 href = 单引号或者双引号的字段`
 >   需求：将网址全部替换为 "https://ant.design"
 
 ```js
@@ -586,7 +586,7 @@ console.log(title.match(reg).join('')) // 新增人数：10人
 
 #### 34、前不等断言
 
-> ?<! 匹配前面不是什么的字段
+> `?<! 匹配前面不是什么的字段`
 
 ```js
 let name = 'abc123def'

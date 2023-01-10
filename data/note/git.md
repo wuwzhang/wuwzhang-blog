@@ -26,7 +26,7 @@ draft: false
 - git status 查看当前分支状态
 - git pull `<远程仓库名> <远程分支名>` 拉取远程仓库的分支与本地当前分支合并
 - git pull `<远程仓库名> <远程分支名>:<本地分支名>` 拉取远程仓库的分支与本地某个分支合并
-- git commit -m "<注释>" 提交代码到本地仓库，并写提交注释
+- git commit -m "`<注释>`" 提交代码到本地仓库，并写提交注释
 - git commit -v 提交时显示所有 diff 信息
 - git commit --amend [file1] [file2] 重做上一次 commit，并包括指定文件的新变化
 
@@ -48,7 +48,7 @@ draft: false
 - git merge `<分支名>` 合并分支
 - git merge --abort 合并分支出现冲突时，取消合并，一切回到合并前的状态
 - git branch `<新分支名>` 基于当前分支，新建一个分支
-- git checkout --orphan <新分支名> 新建一个空分支（会保留之前分支的所有文件）
+- git checkout --orphan `<新分支名>` 新建一个空分支（会保留之前分支的所有文件）
 - git branch -D `<分支名>` 删除本地某个分支
 - git push `<远程库名> :<分支名>` 删除远程某个分支
 - git branch `<新分支名称> <提交 ID>` 从提交历史恢复某个删掉的某个分支
@@ -92,9 +92,9 @@ draft: false
 - git stash pop 取出储藏中最后存入的工作状态进行恢复，会删除储藏
 
 - git stash list 查看所有储藏中的工作
-- git stash apply <储藏的名称> 取出储藏中对应的工作状态进行恢复，不会删除储藏
+- git stash apply `<储藏的名称>` 取出储藏中对应的工作状态进行恢复，不会删除储藏
 - git stash clear 清空所有储藏中的工作
-- git stash drop <储藏的名称> 删除对应的某个储藏
+- git stash drop `<储藏的名称>` 删除对应的某个储藏
 
 ## fork, clone,branch 这三个概念，有什么区别?
 
