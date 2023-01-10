@@ -1,7 +1,7 @@
 const siteMetadata = {
-  title: 'Next.js Starter Blog',
-  author: 'Tails Azimuth',
-  headerTitle: 'WUW Blog',
+  title: "wuwZhang's blog",
+  author: 'wuw zhang',
+  headerTitle: 'WUW BLOG',
   description: '笔记 & 资讯',
   language: 'en-us',
   theme: 'system', // system, dark or light
