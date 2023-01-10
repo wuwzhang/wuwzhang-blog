@@ -5,6 +5,8 @@ tags: ['note', 'git']
 draft: false
 ---
 
+<TOCInline toc={props.toc} asDisclosure toHeading={3} />
+
 # git
 
 ![](https://static.vue-js.com/fe150520-f7af-11eb-991d-334fd31f0201.png)

@@ -6,6 +6,7 @@ draft: false
 summary: 类型转换
 ---
 
+<TOCInline toc={props.toc} asDisclosure toHeading={3} />
 # 类型转换
 
 ## 常见的类型转换有：

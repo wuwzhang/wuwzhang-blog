@@ -2,9 +2,11 @@
 title: webpack
 date: '2023-01-10'
 tags: ['note', 'webpack']
-draft: false
+draft: true
 summary: webpack 是一个用于现代JavaScript应用程序的静态模块打包工具
 ---
+
+<TOCInline toc={props.toc} asDisclosure toHeading={3} />
 
 # webpack
 
@@ -331,3 +333,97 @@ mainfest 文件包含重新 build 生成的 hash 值，以及变化的模块，�
 - 当 socket server 监听到对应的模块发生变化时，会生成两个文件.json（manifest 文件）和.js 文件（update chunk）
 - 通过长连接，socket server 可以直接将这两个文件主动发送给客户端（浏览器）
 - 浏览器拿到两个新的文件后，通过 HMR runtime 机制，加载这两个文件，并且针对修改的模块进行更新
+
+## tree sharking
+
+Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的函数进行移除，从而减小打包体积。
+
+- 当使用语法 import \* 时，Tree Shaking 依然生效。
+- Tree Shaking 甚至可对 JSON 进行优化。原理是因为 JSON 格式简单，通过 AST 容易预测结果，不像 JS 对象有复杂的类型与副作用。
+- 为了减小生产环境体积，我们可以使用一些支持 ES 的 package，比如使用 lodash-es 替代 lodash。
+
+### 对于已经 import 但未实际使用的模块使用 webpack 还会对它打包吗？
+
+模块/文件级别的 tree shaking，如果模块没有导入但是模块内的函数存在副作用(对外部变量进行读写)的话，也会被打包。
+
+解决方法是在模块所在的 npm 包的 `package.json` 中增加 `sideEffects: false`, 表示所有的模块/文件都是没有副作用的，或者有副作用的话被删了也没关系
+
+## webpack proxy
+
+> 接收客户端发送的请求后转发给其他服务器，其目的是为了便于开发者在开发模式下解决跨域问题，只适用在开发阶段
+
+### webpack-dev-server
+
+webpack-dev-server 是 webpack 官方推出的一款开发工具，将自动编译和自动刷新浏览器等一系列对开发友好的功能全部集成在了一起
+
+```js
+// ./webpack.config.js
+const path = require('path')
+
+module.exports = {
+  // ...
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000,
+    proxy: {
+      '/api': {
+        target: 'https://api.github.com',
+      },
+    },
+    // ...
+  },
+}
+```
+
+### 工作原理
+
+proxy 工作原理实质上是利用`http-proxy-middleware`这个 http 代理中间件，实现请求转发给其他服务器
+
+```js
+const express = require('express')
+const proxy = require('http-proxy-middleware')
+
+const app = express()
+
+app.use('/api', proxy({ target: 'http://www.example.org', changeOrigin: true }))
+app.listen(3000)
+
+// http://localhost:3000/api/foo/bar -> http://www.example.org/api/foo/bar
+```
+
+![](https://static.vue-js.com/65b5e5c0-ace5-11eb-85f6-6fac77c0c9b3.png)
+
+在代理服务器传递数据给本地浏览器的过程中，两者同源，并不存在跨域行为，这时候浏览器就能正常接收数据
+
+注意：**服务器与服务器之间请求数据并不会存在跨域行为，跨域行为是浏览器安全策略限制**
+
+## 提高 webpack 的构建速度
+
+- 优化 loader 配置
+  - 可以通过配置 include、exclude、test 属性来匹配文件，接触 include、exclude 规定哪些匹配应用 loader
+- 合理使用 resolve.extensions
+  - 通过 resolve.extensions 是解析到文件时自动添加拓展名，当我们引入文件的时候，若没有文件后缀名，则会根据数组内的值依次查找
+- 优化 resolve.modules
+  - resolve.modules 用于配置 webpack 去哪些目录下寻找第三方模块
+- 优化 resolve.alias
+  - 通过配置 alias 以减少查找过程
+- 使用 DLLPlugin 插件（动态链接库）
+  - 可以共享，不经常改变的代码，抽成一个共享的库
+- 使用 cache-loader
+  - 在一些性能开销较大的 loader 之前添加 cache-loader，以将结果缓存到磁盘里，显著提升二次构建速度
+- terser 启动多线程
+  - 使用多进程并行运行来提高构建速度
+- 合理使用 sourceMap
+  - 打包生成 sourceMap 的时候，如果信息越详细，打包速度就会越慢。
+
+## 压缩前端项目中 JS 的体积
+
+1. terser (opens new window)或者 uglify (opens new window)，及流行的使用 Rust 编写的 swc 压缩混淆化 JS。
+2. gzip 或者 brotli 压缩，在网关处(nginx)开启
+3. 使用 webpack-bundle-analyzer 分析打包体积，替换占用较大体积的库，如 moment -> dayjs
+4. 使用支持 Tree-Shaking 的库，对无引用的库或函数进行删除，如 lodash -> lodash/es
+5. 对无法 Tree Shaking 的库，进行按需引入模块，如使用 import Button from 'antd/lib/Button'，此处可手写 babel-plugin 自动完成，但不推荐
+6. 使用 babel (css 为 postcss) 时采用 browserlist，越先进的浏览器所需要的 polyfill 越少，体积更小
+7. code spliting，路由懒加载，只加载当前路由的包，按需加载其余的 chunk，首页 JS 体积变小 (PS: 次条不减小总体积，但减小首页体积)
+8. 使用 webpack 的 splitChunksPlugin，把运行时、被引用多次的库进行分包，在分包时要注意避免某一个库被多次引用多次打包。此时分为多个 chunk，虽不能把总体积变小，但可提高加载性能 (PS: 此条不减小总体积，但可提升加载性能)

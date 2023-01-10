@@ -11,7 +11,10 @@ import path from 'path'
 const root = process.cwd()
 
 export async function getStaticPaths() {
-  const tags = await getAllTags('blog')
+  const blogtags = await getAllTags('blog')
+  const notestags = await getAllTags('note')
+
+  const tags = { ...blogtags, ...notestags }
 
   return {
     paths: Object.keys(tags).map((tag) => ({
@@ -24,8 +27,9 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const allPosts = await getAllFilesFrontMatter('blog')
-  const filteredPosts = allPosts.filter(
+  const allBlogPosts = await getAllFilesFrontMatter('blog')
+  const allNotesPosts = await getAllFilesFrontMatter('note')
+  const filteredPosts = [...allBlogPosts, ...allNotesPosts].filter(
     (post) => post.draft !== true && post.tags.map((t) => kebabCase(t)).includes(params.tag)
   )
 

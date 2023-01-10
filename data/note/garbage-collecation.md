@@ -5,6 +5,8 @@ tags: ['note', 'js']
 draft: false
 ---
 
+<TOCInline toc={props.toc} asDisclosure toHeading={3} />
+
 # [垃圾回收](https://www.bilibili.com/video/BV1sy4y137Nh?p=1)
 
 ## 什么是垃圾

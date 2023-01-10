@@ -6,6 +6,7 @@ draft: false
 summary: SourceMap原理
 ---
 
+<TOCInline toc={props.toc} asDisclosure toHeading={3} />
 # SourceMap 原理
 
 - [彻底搞懂 Webpack 的 sourcemap 配置原理](https://mp.weixin.qq.com/s/0Sq9Z0i9Q3N0likFlZB0rQ)
