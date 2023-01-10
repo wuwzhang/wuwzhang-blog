@@ -3,7 +3,7 @@ title: 类型转换
 date: '2022-06-11'
 tags: ['note', 'js']
 draft: false
-summary: 类型转换
+summary: 类型转换分为强制转换（显示转换）和 自动转换（隐式转换）
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />

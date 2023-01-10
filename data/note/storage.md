@@ -3,7 +3,7 @@ title: 缓存
 date: '2022-06-11'
 tags: ['note', 'storage']
 draft: false
-summary: 缓存
+summary: 前端缓存
 ---
 
 ## 前端缓存

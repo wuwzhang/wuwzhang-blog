@@ -3,6 +3,7 @@ title: 动效资源合集
 date: '2022-12-09'
 tags: ['note', 'motion']
 draft: false
+summary: 动效资源合集和动效库、素材
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />

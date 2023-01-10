@@ -26,10 +26,15 @@ export default function ListLayout({
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+          <h1 className="text-center text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title}
           </h1>
-          <div className="relative max-w-lg">
+          <div
+            className="relative max-w-lg"
+            style={{
+              left: `calc(50% - 256px)`,
+            }}
+          >
             <input
               aria-label="Search articles"
               type="text"
@@ -58,14 +63,8 @@ export default function ListLayout({
           {displayPosts.map((frontMatter) => {
             const { slug, date, title, summary, tags } = frontMatter
             return (
-              <li key={slug} className="py-4">
+              <li key={slug} className="border-b py-4">
                 <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                  <dl>
-                    <dt className="sr-only">Published on</dt>
-                    <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                      <time dateTime={date}>{formatDate(date)}</time>
-                    </dd>
-                  </dl>
                   <div className="space-y-3 xl:col-span-3">
                     <div>
                       <h3 className="text-2xl font-bold leading-8 tracking-tight">
@@ -73,7 +72,12 @@ export default function ListLayout({
                           href={`/${type}/${slug}`}
                           className="text-gray-900 dark:text-gray-100"
                         >
-                          {title}
+                          <div className="flex items-baseline">
+                            {title}
+                            <dd className="ml-4 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                              <time dateTime={date}>{formatDate(date)}</time>
+                            </dd>
+                          </div>
                         </Link>
                       </h3>
                       <div className="flex flex-wrap">
@@ -85,6 +89,17 @@ export default function ListLayout({
                     <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                       {summary}
                     </div>
+                    {/* <div className="text-base font-medium leading-6">
+                      <Link
+                        href={`/${type}/${slug}`}
+                        className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                        aria-label={`Read "${title}"`}
+                      >
+                        <span className=" rounded-full bg-primary-50 py-2 px-3 text-sm font-medium uppercase text-primary-600 hover:bg-primary-300 dark:hover:bg-primary-300">
+                          Read more &rarr;
+                        </span>
+                      </Link>
+                    </div> */}
                   </div>
                 </article>
               </li>
