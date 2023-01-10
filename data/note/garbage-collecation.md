@@ -3,6 +3,7 @@ title: 垃圾回收
 date: '2022-10-19'
 tags: ['note', 'js']
 draft: false
+summary: 什么是垃圾：对象不在被引用或不能从根上访问到
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />

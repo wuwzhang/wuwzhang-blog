@@ -3,6 +3,7 @@ title: git
 date: '2023-01-09'
 tags: ['note', 'git']
 draft: false
+summary: 在日常工作中，代码常用的基本操作如下
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />

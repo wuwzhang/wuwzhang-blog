@@ -3,6 +3,7 @@ title: typescript
 date: '2023-01-03'
 tags: ['note', 'typescript']
 draft: false
+summary: TypeScript 是 JavaScript 的类型的超集，支持 ES6 语法，支持面向对象编程的概念，如类、接口、继承、泛型等
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />

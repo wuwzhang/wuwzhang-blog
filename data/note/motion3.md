@@ -3,6 +3,7 @@ title: 动效 - PPT - 2
 date: '2022-03-05'
 tags: ['note', 'motion']
 draft: false
+summary: 动效实现方案
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />

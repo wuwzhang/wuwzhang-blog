@@ -3,6 +3,7 @@ title: 动效 - PPT - 1
 date: '2022-03-04'
 tags: ['note', 'motion']
 draft: false
+summary: 什么样的动效是好动效
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />

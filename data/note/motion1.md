@@ -3,6 +3,7 @@ title: 动效 - 理论
 date: '2022-01-12'
 tags: ['note', 'motion']
 draft: false
+summary: 用户体验设计的发展日趋完善，优秀的动效是完善用户体验中不可或缺的一环，优秀的界面动态设计可以让产品的用户体验锦上添花
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />
