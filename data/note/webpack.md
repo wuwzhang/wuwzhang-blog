@@ -1,6 +1,7 @@
 ---
 title: webpack
 date: '2023-01-10'
+update: '2023-01-11'
 tags: ['note', 'webpack']
 draft: false
 summary: webpack 是一个用于现代JavaScript应用程序的静态模块打包工具
@@ -334,18 +335,6 @@ mainfest 文件包含重新 build 生成的 hash 值，以及变化的模块，�
 - 通过长连接，socket server 可以直接将这两个文件主动发送给客户端（浏览器）
 - 浏览器拿到两个新的文件后，通过 HMR runtime 机制，加载这两个文件，并且针对修改的模块进行更新
 
-## tree sharking
-
-Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的函数进行移除，从而减小打包体积。
-
-- 当使用语法 import \* 时，Tree Shaking 依然生效。
-- Tree Shaking 甚至可对 JSON 进行优化。原理是因为 JSON 格式简单，通过 AST 容易预测结果，不像 JS 对象有复杂的类型与副作用。
-- 为了减小生产环境体积，我们可以使用一些支持 ES 的 package，比如使用 lodash-es 替代 lodash。
-
-### 对于已经 import 但未实际使用的模块使用 webpack 还会对它打包吗？
-
-模块/文件级别的 tree shaking，如果模块没有导入但是模块内的函数存在副作用(对外部变量进行读写)的话，也会被打包。
-
 解决方法是在模块所在的 npm 包的 `package.json` 中增加 `sideEffects: false`, 表示所有的模块/文件都是没有副作用的，或者有副作用的话被删了也没关系
 
 ## webpack proxy
@@ -427,3 +416,68 @@ app.listen(3000)
 6. 使用 babel (css 为 postcss) 时采用 browserlist，越先进的浏览器所需要的 polyfill 越少，体积更小
 7. code spliting，路由懒加载，只加载当前路由的包，按需加载其余的 chunk，首页 JS 体积变小 (PS: 次条不减小总体积，但减小首页体积)
 8. 使用 webpack 的 splitChunksPlugin，把运行时、被引用多次的库进行分包，在分包时要注意避免某一个库被多次引用多次打包。此时分为多个 chunk，虽不能把总体积变小，但可提高加载性能 (PS: 此条不减小总体积，但可提升加载性能)
+
+## 借助 webpack 来优化前端性能
+
+- JS 代码压缩：terser-webpack-plugin
+- CSS 代码压缩：css-minimizer-webpack-plugin
+- Html 文件代码压缩：HtmlWebpackPlugin
+- 文件大小压缩：compression-webpack-plugin
+- 图片压缩：image-webpack-loader
+- Tree Shaking
+- 代码分离
+- 内联 chunk
+
+### 代码分离
+
+将代码分离到不同的 bundle 中，之后我们可以按需加载，或者并行加载这些文件
+
+默认情况下，所有的 JavaScript 代码（业务代码、第三方依赖、暂时没有用到的模块）在首页全部都加载，就会影响首页的加载速度
+
+代码分离可以分出出更小的 bundle，以及控制资源加载优先级，提供代码的加载性能
+
+这里通过 splitChunksPlugin 来实现，该插件 webpack 已经默认安装和集成，只需要配置即可
+
+```js
+module.exports = {
+    ...
+    optimization:{
+        splitChunks:{
+            chunks:"all"
+        }
+    }
+}
+```
+
+- Chunks，对同步代码还是异步代码进行处理
+- minSize： 拆分包的大小, 至少为 minSize，如何包的大小不超过 minSize，这个包不会拆分
+- maxSize： 将大于 maxSize 的包，拆分为不小于 minSize 的包
+- minChunks：被引入的次数，默认是 1
+
+### tree sharking
+
+Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的函数进行移除，从而减小打包体积。
+
+- 当使用语法 import \* 时，Tree Shaking 依然生效。
+- Tree Shaking 甚至可对 JSON 进行优化。原理是因为 JSON 格式简单，通过 AST 容易预测结果，不像 JS 对象有复杂的类型与副作用。
+- 为了减小生产环境体积，我们可以使用一些支持 ES 的 package，比如使用 lodash-es 替代 lodash。
+
+在 webpack 实现 Trss shaking 有两种不同的方案：
+
+- usedExports：通过标记某些函数是否被使用，之后通过 Terser 来进行优化的
+  - 使用之后，没被用上的代码在 webpack 打包中会加入 unused harmony export mul 注释，用来告知 Terser 在优化时，可以删除掉这段代码
+- sideEffects：跳过整个模块/文件，直接查看该文件是否有副作用
+  - sideEffects 用于告知 webpack compiler 哪些模块时有副作用，配置方法是在 package.json 中设置 sideEffects 属性,如果 sideEffects 设置为 false，就是告知 webpack 可以安全的删除未用到的 exports
+  - 上述都是关于 javascript 的 tree shaking，css 同样也能够实现 tree shaking(purgecss-plugin-webpack)
+
+#### 对于已经 import 但未实际使用的模块使用 webpack 还会对它打包吗？
+
+模块/文件级别的 tree shaking，如果模块没有导入但是模块内的函数存在副作用(对外部变量进行读写)的话，也会被打包。
+
+### 内联 chunk
+
+可以通过 InlineChunkHtmlPlugin 插件将一些 chunk 的模块内联到 html，如 runtime 的代码（对模块进行解析、加载、模块信息相关的代码），代码量并不大，但是必须加载的
+
+### 总结
+
+关于 webpack 对前端性能的优化，可以通过文件体积大小入手，其次还可通过分包的形式、减少 http 请求次数等方式，实现对前端性能的优化
