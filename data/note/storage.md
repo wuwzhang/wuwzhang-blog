@@ -1,7 +1,8 @@
 ---
 title: 缓存
 date: '2022-06-11'
-tags: ['note', 'storage']
+tags: ['Nonee', 'storage', 'HTTP']
+update: '2023-01-12'
 draft: false
 summary: 前端缓存
 ---
@@ -76,6 +77,39 @@ summary: 前端缓存
 ![](https://upload-images.jianshu.io/upload_images/4845448-217723260f75ed90?imageMogr2/auto-orient/strip|imageView2/2/w/800/format/webp)
 在`HTTP 1.1`的版本，`Expires`被`Cache-Control`替代
 
+##### Expires
+
+- HTTP 1.0
+- 存在于服务端返回的响应头中
+- 缺点：不存在时区问题, 服务器的时间和浏览器的时间可能并不一致导致失效
+
+```
+Expires: Wed, 21 Oct 2021 07:28:00 GMT
+```
+
+##### Cache-Control
+
+- HTTP 1.1
+- 响应头和请求头
+- 缺点：时间最终还是会失效
+
+Cache-Control 主要是利用该字段的 max-age 值来进行判断，它是一个相对时间，例如 Cache-Control:max-age=3600，代表着资源的有效期是 3600 秒。
+
+cache-control 除了该字段外，还有下面几个比较常用的设置值：
+
+- no-cache：不使用本地缓存。需要使用缓存协商，先与服务器确认返回的响应是否被更改，如果之前的响应中存在 ETag，那么请求的时候会与服务端验证，如果资源未被更改，则可以避免重新下载。
+- no-store：直接禁止浏览器缓存数据，每次用户请求该资源，都会向服务器发送一个请求，每次都会下载完整的资源。
+- public：可以被所有的用户缓存，包括终端用户和 CDN 等中间代理服务器。
+- private：只能被终端用户的浏览器缓存，不允许 CDN 等中继缓存服务器对其缓存。
+  Cache-Control 与 Expires 可以在服务端配置同时启用，同时启用的时候 Cache-Control 优先级高。如：
+
+```
+cache-control:max-age=691200
+expires:Fri, 15 May 2020 10:47:02 GMT
+```
+
+那么表示资源可以被缓存的最长时间为 691200 秒。
+
 在`Chrome`浏览器中返回的`200`状态会有两种情况：
 
 - from memory cache
@@ -118,11 +152,13 @@ app.listen(3000)
 
 #### 协商缓存
 
-当浏览器的强缓存失效的时候或者请求头中设置了不走强缓存(属性设置为`no-cache`)，并且在请求头中设置了 `If-Modified-Since`或者`If-None-Match`的时候，会将这两个属性值到服务端去验证是否命中协商缓存，如果命中了协商缓存，会返回`304`状态，加载浏览器缓存，那么浏览器第二次请求时就会与服务器进行协商，与服务器端对比判断资源是否进行了修改更新。
+当浏览器的强缓存失效的时候或者请求头中设置了不走强缓存(属性设置为`no-cache`)
+
+在请求头中设置了 `If-Modified-Since`或者`If-None-Match`的时候，会将这两个属性值到服务端去验证是否命中协商缓存，如果命中了协商缓存，会返回`304`状态，加载浏览器缓存，那么浏览器第二次请求时就会与服务器进行协商，与服务器端对比判断资源是否进行了修改更新。
 
 ![](https://images2015.cnblogs.com/blog/632130/201702/632130-20170210141716838-764535017.png)
 
-跟协商缓存相关的`header`头属性有（`ETag/If-Not-Match` 、`Last-Modified/If-Modified-Since`）请求头和响应头需要成对出现:
+跟协商缓存相关的`header`头属性有（`ETag/If-None-Match` 、`Last-Modified/If-Modified-Since`）请求头和响应头需要成对出现:
 ![](https://upload-images.jianshu.io/upload_images/4845448-a22cef109d00aa79?imageMogr2/auto-orient/strip|imageView2/2/w/800/format/webp)
 
 协商缓存的执行流程是这样的：
@@ -130,7 +166,7 @@ app.listen(3000)
 - 当浏览器**第一次**向服务器发送请求时，会在响应头中返回协商缓存的头属性：`ETag`和`Last-Modified`
   - `ETag`返回的是一个`hash`值
   - `Last-Modified`返回的是`GMT`格式的最后修改时间。
-- 浏览器在**第二次**发送请求的时候，会在请求头中带上与`ETag`对应的`If-Not-Match`
+- 浏览器在**第二次**发送请求的时候，会在请求头中带上与`ETag`对应的`If-None-Match`
   - `ETag`就是响应头中返回的`ETag`的值
   - `Last-Modified`对应的`If-Modified-Since`。
 - 服务器在接收到这两个参数后会做比
@@ -195,7 +231,7 @@ app.listen(4000) // 使用新端口号，否则上面验证的协商缓存会�
 然后修改了`test.js` ，增加一个空格后再删除一个空格，保持文件内容不变，但文件的修改时间改变，发起第三次请求，由于我生成`ETag`的方式是通过对文件内容进行 MD5 加密生成，所以虽然修改时间变化了，但请求依然返回了`304`，读取浏览器缓存。
 ![](https://static001.geekbang.org/infoq/04/04826d47fd951a7c852608c3bdcce519.webp)
 
-`ETag/If-Not-Match`是在`HTTP/1.1`出现的，主要解决了`Last-Modified/If-Modified-Since`所解决不了的问题：
+`ETag/If-None-Match`是在`HTTP/1.1`出现的，主要解决了`Last-Modified/If-Modified-Since`所解决不了的问题：
 
 - `Last-Modified`标注的最后修改只能精确到秒级，如果某些文件在`1`秒钟以内，被修改多次的话，它将不能准确标注文件的修改时间
 - 如果某些文件被修改了，但是内容并没有任何变化，而`Last-Modified`却改变了，导致文件没法使用缓存
@@ -203,7 +239,7 @@ app.listen(4000) // 使用新端口号，否则上面验证的协商缓存会�
 
 ##### 整体流程图:
 
-![](https://static001.geekbang.org/infoq/f4/f4c971ebefa670b4e4d22d05d2a4e535.webp)
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ba010a1229f477b93e3432e5e8be509~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp)
 
 #### 私有缓存（浏览器级缓存）
 
