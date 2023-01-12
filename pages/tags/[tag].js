@@ -17,7 +17,7 @@ export async function getStaticPaths() {
   const tags = { ...blogtags, ...notestags }
 
   return {
-    paths: Object.keys(tags).map((tag) => ({
+    paths: Object.keys(tags)?.map((tag) => ({
       params: {
         tag,
       },
@@ -30,7 +30,7 @@ export async function getStaticProps({ params }) {
   const allBlogPosts = await getAllFilesFrontMatter('blog')
   const allNotesPosts = await getAllFilesFrontMatter('note')
   const filteredPosts = [...allBlogPosts, ...allNotesPosts].filter(
-    (post) => post.draft !== true && post.tags.map((t) => kebabCase(t)).includes(params.tag)
+    (post) => post.draft !== true && post?.tags?.map?.((t) => kebabCase(t)).includes(params.tag)
   )
 
   // rss

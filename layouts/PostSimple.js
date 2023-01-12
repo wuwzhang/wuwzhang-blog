@@ -8,7 +8,7 @@ import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 export default function PostLayout({ frontMatter, next, prev, children, type }) {
-  const { date, title } = frontMatter
+  const { title } = frontMatter
 
   return (
     <SectionContainer>
@@ -17,18 +17,8 @@ export default function PostLayout({ frontMatter, next, prev, children, type }) 
       <article>
         <div>
           <header>
-            <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
-              <dl>
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>{formatDate(date)}</time>
-                  </dd>
-                </div>
-              </dl>
-              <div>
-                <PageTitle>{title}</PageTitle>
-              </div>
+            <div>
+              <PageTitle>{title}</PageTitle>
             </div>
           </header>
           <div

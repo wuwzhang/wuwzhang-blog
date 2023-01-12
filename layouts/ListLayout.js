@@ -1,6 +1,6 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
+
 import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import formatDate from '@/lib/utils/formatDate'
@@ -89,17 +89,6 @@ export default function ListLayout({
                     <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                       {summary}
                     </div>
-                    {/* <div className="text-base font-medium leading-6">
-                      <Link
-                        href={`/${type}/${slug}`}
-                        className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                        aria-label={`Read "${title}"`}
-                      >
-                        <span className=" rounded-full bg-primary-50 py-2 px-3 text-sm font-medium uppercase text-primary-600 hover:bg-primary-300 dark:hover:bg-primary-300">
-                          Read more &rarr;
-                        </span>
-                      </Link>
-                    </div> */}
                   </div>
                 </article>
               </li>
