@@ -1,7 +1,7 @@
 ---
 title: tree sharking
 date: '2023-01-09'
-tags: ['note', 'npm', 'project']
+tags: ['note', 'npm', 'project', 'tree sharking']
 draft: false
 summary: tree shark原理
 ---
@@ -18,7 +18,7 @@ ES Modules 之所以能 Tree-shaking 主要为以下四个原因
 1. import 只能作为模块顶层的语句出现，不能出现在 function 里面或是 if 里面。
 2. import 的模块名只能是字符串常量。
 3. 不管 import 的语句出现的位置在哪里，在模块初始化的时候所有的 import 都必须已经导入完成。
-4. import binding 是 immutable 的，类似 const。比如说你不能 import { a } from ‘./a’ 然后给 a 赋值个其他什么东西。
+4. import binding 是 immutable 的，类似 const。比如说你不能 `import { a } from './a'` 然后给 a 赋值个其他什么东西。
 
 ## 特点
 
@@ -86,7 +86,7 @@ console.log(42)
 
 在打包地时候可以显示地指定 treeshake.moduleSideEffects 为 false，可以显示地告诉 rollup 外部依赖项没有其他副作用。
 
-不指定的情况下的打包输出。 npx rollup index.js --file bundle.js
+不指定的情况下的打包输出。 `npx rollup index.js --file bundle.js`
 
 ```js
 console.log(unused())
@@ -98,11 +98,15 @@ function unused() {
 console.log(42)
 ```
 
-指定没有副作用下的打包输出。npx rollup index.js --file bundle-no-effect.js --no-treeshake.moduleSideEffects
+指定没有副作用下的打包输出。`npx rollup index.js --file bundle-no-effect.js --no-treeshake.moduleSideEffects`
 
 ```js
 console.log(42)
 ```
+
+## 参考笔记
+
+- [第 147 期](../blog/147.md)
 
 ## 参考文章
 

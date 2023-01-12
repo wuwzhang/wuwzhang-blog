@@ -3,8 +3,10 @@ title: 函数式编程
 date: '2023-01-08'
 tags: ['function', 'es6']
 draft: false
-summary: 手撕函数式编程
+description: curry、compose、pipe、reduce、flat...
 ---
+
+<TOCInline toc={props.toc} asDisclosure toHeading={2} />
 
 ## curry
 

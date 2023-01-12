@@ -1,10 +1,14 @@
 ---
-title: chrome 书签格式解析
-date: '2023-01-09'
-tags: ['note', 'snippet', 'chrome']
+title: sinppets
+date: '2023-01-08'
+tags: ['ES6', 'snippets']
 draft: false
-summary: chrome 书签格式化解析
+description: chrome书签格式化...
 ---
+
+<TOCInline toc={props.toc} asDisclosure toHeading={2} />
+
+## chrome 书签格式化
 
 ```js
 const dfs = (children) => {
