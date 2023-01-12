@@ -1,7 +1,7 @@
 ---
 title: webpack
 date: '2023-01-10'
-update: '2023-01-11'
+update: '2023-01-12'
 tags: ['note', 'webpack']
 draft: false
 summary: webpack 是一个用于现代JavaScript应用程序的静态模块打包工具
@@ -428,7 +428,7 @@ app.listen(3000)
 - 代码分离
 - 内联 chunk
 
-### 代码分离
+### code spliting 代码分离
 
 将代码分离到不同的 bundle 中，之后我们可以按需加载，或者并行加载这些文件
 
@@ -436,16 +436,45 @@ app.listen(3000)
 
 代码分离可以分出出更小的 bundle，以及控制资源加载优先级，提供代码的加载性能
 
+webpack 的运行时，包括最重要的两个数据结构：
+
+- `__webpack_modules__`: 维护一个所有模块的数组。将入口模块解析为 AST，根据 AST 深度优先搜索所有的模块，并构建出这个模块数组。每个模块都由一个包裹函数 (module, module.exports, `__webpack_require__`) 对模块进行包裹构成。
+- `__webpack_require__`(moduleId): 手动实现加载一个模块。对已加载过的模块进行缓存，对未加载过的模块，根据 id 定位到 `__webpack_modules__` 中的包裹函数，执行并返回 module.exports，并缓存。
+
+webpack 中提供了方案 4.0 之前是：CommonsChunkPlugin 4.0 后是 optimization.splitChunks
+
 这里通过 splitChunksPlugin 来实现，该插件 webpack 已经默认安装和集成，只需要配置即可
 
+#### code spliting
+
+在 webpack 中，通过 import() 可实现 code spliting。假设我们有以下文件:
+
 ```js
+// 以下为 index.js 内容
+import('./sum').then((m) => {
+  m.default(3, 4)
+})
+
+// 以下为 sum.js 内容
+const sum = (x, y) => x + y
+export default sum
+```
+
+```js
+// https://github.com/shfshanyue/node-examples/blob/master/engineering/webpack/code-spliting/build.js
 module.exports = {
-    ...
-    optimization:{
-        splitChunks:{
-            chunks:"all"
-        }
-    }
+  entry: './index.js',
+  mode: 'none',
+  output: {
+    filename: '[name].[contenthash].js',
+    chunkFilename: 'chunk.[name].[id].[contenthash].js',
+    path: path.resolve(__dirname, 'dist/deterministic'),
+    clean: true,
+  },
+  optimization: {
+    moduleIds: 'deterministic',
+    chunkIds: 'deterministic',
+  },
 }
 ```
 
@@ -454,7 +483,65 @@ module.exports = {
 - maxSize： 将大于 maxSize 的包，拆分为不小于 minSize 的包
 - minChunks：被引入的次数，默认是 1
 
-### tree sharking
+##### 运行时解析
+
+通过观察打包后的文件 `dist/deterministic/main.xxxxxx.js`，可以发现: 使用 `import()` 加载数据时，以上代码将被 webpack 编译为以下代码
+
+```js
+__webpack_require__
+  .e(/* import() | sum */ 644)
+  .then(__webpack_require__.bind(__webpack_require__, 709))
+  .then((m) => {
+    m.default(3, 4)
+  })
+```
+
+此时 644 为 chunkId，观察 chunk.sum.xxxx.js 文件，以下为 sum 函数所构建而成的 chunk:
+
+```js
+'use strict'
+;(self['webpackChunk'] = self['webpackChunk'] || []).push([
+  [644],
+  {
+    /***/ 709: /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.r(__webpack_exports__)
+      /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+        /* harmony export */ default: () => __WEBPACK_DEFAULT_EXPORT__,
+        /* harmony export */
+      })
+      const sum = (x, y) => x + y
+
+      /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = sum
+
+      /***/
+    },
+  },
+])
+```
+
+以下两个数据结构是加载 chunk 的关键:
+
+- `__webpack_require__.e`: 加载 chunk。该函数将使用 `document.createElement('script')` 异步加载 chunk 并封装为 Promise。
+- `self["webpackChunk"].push: JSONP cllaback`，收集 modules 至 `__webpack_modules__`，并将 `__webpack_require__.e` 的 Promise 进行 resolve。
+
+实际上，在 webpack 中可配置 output.chunkLoading 来选择加载 chunk 的方式，比如选择通过 import() 的方式进行加载。(由于在生产环境需要考虑 import 的兼容性，目前还是 JSONP 方式较多)
+
+```js
+{
+  entry: './index.js',
+  mode: 'none',
+  output: {
+    filename: 'main.[contenthash].js',
+    chunkFilename: '[name].chunk.[chunkhash].js',
+    path: path.resolve(__dirname, 'dist/import'),
+    clean: true,
+    // 默认为 `jsonp`
+    chunkLoading: 'import'
+  }
+})
+```
+
+### [tree sharking](./tree-sharking.md)
 
 Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的函数进行移除，从而减小打包体积。
 
@@ -462,7 +549,7 @@ Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的
 - Tree Shaking 甚至可对 JSON 进行优化。原理是因为 JSON 格式简单，通过 AST 容易预测结果，不像 JS 对象有复杂的类型与副作用。
 - 为了减小生产环境体积，我们可以使用一些支持 ES 的 package，比如使用 lodash-es 替代 lodash。
 
-在 webpack 实现 Trss shaking 有两种不同的方案：
+在 webpack 实现 Tess shaking 有两种不同的方案：
 
 - usedExports：通过标记某些函数是否被使用，之后通过 Terser 来进行优化的
   - 使用之后，没被用上的代码在 webpack 打包中会加入 unused harmony export mul 注释，用来告知 Terser 在优化时，可以删除掉这段代码
@@ -481,3 +568,8 @@ Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的
 ### 总结
 
 关于 webpack 对前端性能的优化，可以通过文件体积大小入手，其次还可通过分包的形式、减少 http 请求次数等方式，实现对前端性能的优化
+
+## 参考文章
+
+- [webpack - 山月](https://q.shanyue.tech/fe/webpack/)
+- [说说你对 webpack 的理解](https://vue3js.cn/interview/webpack/webpack.html)
