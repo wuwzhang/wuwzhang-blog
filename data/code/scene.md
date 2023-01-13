@@ -5,13 +5,12 @@ draft: false
 description: 红绿灯
 ---
 
-<TOCInline toc={props.toc} asDisclosure toHeading={2} />
-
 ## 红绿灯
 
 ### callback
 
-<details><summary>代码</summary>
+<details>
+  <summary>代码</summary>
 
 ```js
 function red() {
@@ -57,7 +56,8 @@ work()
 
 ### Promise
 
-<details><summary>代码</summary>
+<details>
+  <summary>代码</summary>
 
 ```js
 const promiseLight = (timer, light) => {
@@ -91,7 +91,8 @@ const work = () => {
 
 ### generator
 
-<details><summary>代码</summary>
+<details>
+  <summary>代码</summary>
 
 ```js
 const generator = function* () {
@@ -111,7 +112,8 @@ generatorObj.next()
 
 ### async/awiat
 
-<details><summary>代码</summary>
+<details>
+  <summary>代码</summary>
 
 ```js
 const generator = function* () {
