@@ -3,7 +3,7 @@ title: sinppets
 date: '2023-01-08'
 tags: ['ES6', 'snippets']
 draft: false
-description: chrome书签格式化...
+description: chrome书签格式化
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={2} />
