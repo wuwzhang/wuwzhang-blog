@@ -3,7 +3,7 @@ title: JS基础
 date: '2023-01-08'
 tags: ['ES6', 'JS']
 draft: false
-description: extends、call/bind/apply、instaceOf、new...
+description: call、bind、apply、instaceOf、new、Object.create、extends
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={2} />

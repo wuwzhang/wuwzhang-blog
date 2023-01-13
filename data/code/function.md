@@ -3,7 +3,7 @@ title: 函数式编程
 date: '2023-01-08'
 tags: ['function', 'es6']
 draft: false
-description: curry、compose、pipe、reduce、flat...
+description: curry、compose、pipe、reduce、flat、自定义迭代函数
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={2} />
