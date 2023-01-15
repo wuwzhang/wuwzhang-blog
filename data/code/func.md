@@ -3,12 +3,15 @@ title: 功能函数
 date: '2023-01-08'
 tags: ['function', 'es6']
 draft: false
-description: debounce、throttle、deepClone、shallowEqual、deepEqual、sum、sleep/delay、shuffle
+description: debounce、throttle、deepClone、shallowEqual、deepEqual、sum、sleep/delay、shuffle、jsonp
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={2} />
 
 ## debounce
+
+<details>
+	<summary>代码</summary>
 
 ```js
 const debounce = (func, delay = 500) => {
@@ -26,7 +29,12 @@ const debounce = (func, delay = 500) => {
 }
 ```
 
+</details>
+
 ## throttle
+
+<details>
+	<summary>代码</summary>
 
 ```js
 const throttle = (func, delay = 500) => {
@@ -43,7 +51,12 @@ const throttle = (func, delay = 500) => {
 }
 ```
 
+</details>
+
 ## deepClone
+
+<details>
+	<summary>代码</summary>
 
 ```js
 const deepClone = (obj, map = new WeakMap()) => {
@@ -91,9 +104,16 @@ const deepClone = (obj, map = new WeakMap()) => {
 }
 ```
 
+</details>
+
 [How to Get a Perfect Deep Equal in JavaScript?](https://levelup.gitconnected.com/how-to-get-a-perfect-deep-equal-in-javascript-b849fe30e54f)
 
+[分别用深度优先思想和广度优先思想实现一个拷贝函数？](../blog/69.md#上期的答案)
+
 ## shallowEqual
+
+<details>
+	<summary>代码</summary>
 
 ```js
 function shallowEqual(objA, objB) {
@@ -128,7 +148,12 @@ function shallowEqual(objA, objB) {
 }
 ```
 
+</details>
+
 ## deepEqual
+
+<details>
+	<summary>代码</summary>
 
 ```js
 const deepEqual = (objA, objB, map = new WeakMap()) => {
@@ -170,7 +195,12 @@ const deepEqual = (objA, objB, map = new WeakMap()) => {
 }
 ```
 
+</details>
+
 ## sum
+
+<details>
+	<summary>代码</summary>
 
 ```js
 const sum = (num1, num2) => {
@@ -183,7 +213,12 @@ const sum = (num1, num2) => {
 }
 ```
 
+</details>
+
 ## sleep/delay
+
+<details>
+	<summary>代码</summary>
 
 ```ts
 const sleep = (t = 0) => new Promise((resolve) => setTimeout(resolve, t))
@@ -195,8 +230,249 @@ const delay = <T extends (...args: any[]) => any>(
 ): Promise<ReturnType<T>> => sleep(seconds).then(() => func(...args))
 ```
 
+</details>
+
 ## shuffle
+
+<details>
+	<summary>代码</summary>
 
 ```ts
 const shuffle = (list) => list.sort((x, y) => Math.random() - 0.5)
 ```
+
+</details>
+
+## jsonp
+
+<details>
+	<summary>代码</summary>
+
+```js
+function stringify(data) {
+  const pairs = Object.entries(data)
+  const qs = pairs
+    .map(([k, v]) => {
+      let noValue = false
+      if (v === null || v === undefined || typeof v === 'object') {
+        noValue = true
+      }
+      return `${encodeURIComponent(k)}=${noValue ? '' : encodeURIComponent(v)}`
+    })
+    .join('&')
+  return qs
+}
+
+function jsonp({ url, onData, params }) {
+  const script = document.createElement('script')
+
+  // 一、为了避免全局污染，使用一个随机函数名
+  const cbFnName = `JSONP_PADDING_${Math.random().toString().slice(2)}`
+  // 二、默认 callback 函数为 cbFnName
+  script.src = `${url}?${stringify({ callback: cbFnName, ...params })}`
+  // 三、使用 onData 作为 cbFnName 回调函数，接收数据
+  window[cbFnName] = onData
+
+  document.body.appendChild(script)
+}
+```
+
+</details>
+
+## toPascalCase
+
+<details>
+	<summary>代码</summary>
+
+```js
+const toPascalCase = (str: string): string =>
+  (str.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => `${w.charAt(0).toUpperCase()}${w.slice(1)}`)
+    .join('')
+
+toPascalCase('hello world') // 'HelloWorld'
+toPascalCase('hello.world') // 'HelloWorld'
+toPascalCase('foo_bar-baz') // FooBarBaz
+
+//驼峰转短横线
+function toKebabCase(str) {
+  let res = str.replace(/([A-Z])/g, (all, i) => {
+    return '-' + i.toLowerCase()
+  })
+  if (res.slice(0, 1) === '-') {
+    res = res.slice(1) //去除开头的-
+  }
+  return res
+}
+//短横线转驼峰
+function toCamelCase(str) {
+  return str.replace(/-([a-zA-Z])/g, function (all, i) {
+    return i.toUpperCase()
+  })
+}
+
+console.log(toCamelCase('get-element-by-id'))
+console.log(toKebabCase('GetElementById'))
+```
+
+</details>
+
+## 判断日期是否为双休日
+
+<details>
+	<summary>代码</summary>
+
+```ts
+const isWeekend = (date = new Date()): boolean => date.getDay() % 6 === 0
+```
+
+</details>
+
+## omit
+
+剔除对象中指定数组中的键名
+
+<details>
+	<summary>代码</summary>
+
+```js
+const omit = (obj, arr) =>
+  Object.keys(obj)
+    .filter((k) => !arr.includes(k))
+    .reduce((acc, key) => ((acc[key] = obj[key]), acc), {})
+
+omit({ a: 1, b: '2', c: 3 }, ['b']) // { 'a': 1, 'c': 3 }
+```
+
+</details>
+
+## chunk
+
+按指定长度给数组组分
+
+<details>
+	<summary>代码</summary>
+
+```js
+const chunk = (arr, size) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+    arr.slice(i * size, i * size + size)
+  )
+
+chunk([1, 2, 3, 4, 5], 2) // [[1, 2], [3, 4], [5]]
+```
+
+</details>
+
+## deepGet
+
+<details>
+	<summary>代码</summary>
+
+```js
+const deepGet = (obj, keys) =>
+  keys.reduce((xs, x) => (xs && xs[x] !== null && xs[x] !== undefined ? xs[x] : null), obj)
+
+let index = 2
+const data = {
+  foo: {
+    foz: [1, 2, 3],
+    bar: {
+      baz: ['a', 'b', 'c'],
+    },
+  },
+}
+deepGet(data, ['foo', 'foz', index]) // get 3
+deepGet(data, ['foo', 'bar', 'baz', 8, 'foz']) // null
+```
+
+</details>
+
+## unzip
+
+<details>
+	<summary>代码</summary>
+
+```js
+const unzip = (arr) =>
+  arr.reduce(
+    (acc, c) => (c.forEach((v, i) => acc[i].push(v)), acc),
+    Array.from({ length: Math.max(...arr.map((a) => a.length)) }, (_) => [])
+  )
+
+unzip([
+  ['a', 1],
+  ['b', 2],
+  ['c', 3],
+  ['d', 4],
+  ['e', 5],
+]) // [['a', 'b', 'c', 'd', 'e'], [1, 2, 3, 4, 5]]
+```
+
+</details>
+
+## countBy
+
+根据给定的函数对数组的元素进行分组，并返回每个组中元素的计数
+
+<details>
+	<summary>代码</summary>
+
+```js
+const countBy = (arr, fn) =>
+  arr.map(typeof fn === 'function' ? fn : (val) => val[fn]).reduce((acc, val) => {
+    acc[val] = (acc[val] || 0) + 1
+    return acc
+  }, {})
+
+countBy([6.1, 4.2, 6.3], Math.floor) // {4: 1, 6: 2}
+countBy(['one', 'two', 'three'], 'length') // {3: 2, 5: 1}
+countBy([{ count: 5 }, { count: 10 }, { count: 5 }], (x) => x.count)
+// {5: 2, 10: 1}
+```
+
+</details>
+
+## isValidJSON
+
+判断是否为合法的`json`数据
+
+<details>
+	<summary>代码</summary>
+
+```js
+const isValidJSON = (str) => {
+  try {
+    JSON.parse(str)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+isValidJSON('{"name":"Adam","age":20}') // true
+isValidJSON('{"name":"Adam",age:"20"}') // false
+isValidJSON(null) // true
+```
+
+</details>
+
+## isEmpty
+
+<details>
+	<summary>代码</summary>
+
+```js
+isEmpty([]) // true
+isEmpty({}) // true
+isEmpty('') // true
+isEmpty([1, 2]) // false
+isEmpty({ a: 1, b: 2 }) // false
+isEmpty('text') // false
+isEmpty(123) // true - type is not considered a collection
+isEmpty(true) // true - type is not considered a collection
+
+const isEmpty = (val) => val == null || !(Object.keys(val) || val).length
+```
+
+</details>

@@ -258,7 +258,7 @@ setTimeout(() => {
 // 2
 ```
 
-## 参考文章
+## 来源
 
 - [《模块化系列》彻底理清 AMD,CommonJS,CMD,UMD,ES6](https://zhuanlan.zhihu.com/p/108217164)
 - [前端打包时 cjs、es、umd 模块有何不同](https://q.shanyue.tech/engineering/475.html#cjs-commonjs)

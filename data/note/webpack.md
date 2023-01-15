@@ -569,7 +569,7 @@ Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的
 
 关于 webpack 对前端性能的优化，可以通过文件体积大小入手，其次还可通过分包的形式、减少 http 请求次数等方式，实现对前端性能的优化
 
-## 参考文章
+## 来源
 
 - [webpack - 山月](https://q.shanyue.tech/fe/webpack/)
 - [说说你对 webpack 的理解](https://vue3js.cn/interview/webpack/webpack.html)

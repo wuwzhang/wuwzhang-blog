@@ -1,7 +1,7 @@
 ---
-title: sinppets
+title: chrome书签格式化
 date: '2023-01-08'
-tags: ['ES6', 'snippets']
+tags: ['chrome']
 draft: false
 description: chrome书签格式化
 ---
