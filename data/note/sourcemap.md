@@ -1,7 +1,7 @@
 ---
 title: SourceMap
 date: '2022-06-11'
-tags: ['note', 'project']
+tags: ['project']
 draft: false
 summary: SourceMap原理
 ---

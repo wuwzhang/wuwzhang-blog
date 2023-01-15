@@ -1,7 +1,7 @@
 ---
 title: npm
 date: '2023-01-09'
-tags: ['note', 'npm', 'project']
+tags: ['npm', 'project']
 draft: false
 summary: 在日常工作中，代码常用的基本操作如下
 ---
@@ -197,36 +197,6 @@ npm 读取配置数据遵循如下优先级：
 
 [第 106 期#二、npm install](../blog/106.md####二、npminstall)
 
-## 修复某个 npm 包的紧急 bug
-
-它实际上是一个 diff 文件，在生产环境中可自动根据 diff 文件与版本号 (根据 patch 文件名存取) 将修复场景复原！
-
-`patch-package`
-
-```shell
-# 修改 lodash 的一个小问题
-$ vim node_modules/lodash/index.js
-
-# 对 lodash 的修复生成一个 patch 文件，位于 patches/lodash+4.17.21.patch
-$ npx patch-package lodash
-
-# 将修复文件提交到版本管理之中
-$ git add patches/lodash+4.17.21.patch
-$ git commit -m "fix 一点儿小事 in lodash"
-
-# 此后的命令在生产环境或 CI 中执行
-# 此后的命令在生产环境或 CI 中执行
-# 此后的命令在生产环境或 CI 中执行
-
-# 在生产环境装包
-$ npm i
-
-# 为生产环境的 lodash 进行小修复
-$ npx patch-package
-
-# 大功告成
-```
-
 ## 如何加速 npm install
 
 1. 选择时延低的 registry，需要企业技术基础建设支持
@@ -290,6 +260,27 @@ node_modules
   "postinstall": "patch-package"
 }
 ```
+
+## dependencies 与 devDependencies 有何区别
+
+对于业务代码而讲，它俩区别不大
+
+当进行业务开发时，严格区分 dependencies 与 devDependencies 并无必要，实际上，大部分业务对二者也并无严格区别。
+
+当打包时，依靠的是 `Webpack/Rollup` 对代码进行模块依赖分析，与该模块是否在 dep/devDep 并无关系，只要在 node_modules 上能够找到该 Package 即可。
+
+以至于在 CI 中 `npm i --production` 可加快包安装速度也无必要，因为在 CI 中仍需要 lint、test、build 等。
+
+对于库 (Package) 开发而言，是有严格区分的
+
+- dependencies: 在生产环境中使用
+- devDependencies: 在开发环境中使用，如 webpack/babel/eslint 等
+
+当在项目中安装一个依赖的 Package 时，该依赖的 dependencies 也会安装到项目中，即被下载到 node_modules 目录中。但是 devDependencies 不会
+
+因此当我们开发 Package 时，需要注意到我们所引用的 dependencies 会被我们的使用者一并下载，而 devDependencies 不会。
+
+一些 Package 宣称自己是 zero dependencies，一般就是指不依赖任何 dependencies，如 highlight
 
 ## pnpm 有什么优势
 

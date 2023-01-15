@@ -317,17 +317,6 @@ console.log(toKebabCase('GetElementById'))
 
 </details>
 
-## 判断日期是否为双休日
-
-<details>
-	<summary>代码</summary>
-
-```ts
-const isWeekend = (date = new Date()): boolean => date.getDay() % 6 === 0
-```
-
-</details>
-
 ## omit
 
 剔除对象中指定数组中的键名
@@ -473,6 +462,42 @@ isEmpty(123) // true - type is not considered a collection
 isEmpty(true) // true - type is not considered a collection
 
 const isEmpty = (val) => val == null || !(Object.keys(val) || val).length
+```
+
+</details>
+
+## validateNumber
+
+判断给到的值是否为数字
+
+<details>
+	<summary>代码</summary>
+
+```js
+const validateNumber = (n) => {
+  const num = parseFloat(n)
+  return !Number.isNaN(num) && Number.isFinite(num) && Number(n) == n
+}
+
+validateNumber('10') // true
+validateNumber('a') // false
+validateNumber(1 / 0) // false
+```
+
+</details>
+
+## trim
+
+<details>
+	<summary>代码</summary>
+
+```js
+const trim = (str) => (typeof str === 'string' ? str?.replace(/(^\s*)|(\s*$)/g, '') : str)
+
+trim(' abc  ') // =>'abc';
+trim(' abc') // => 'abc';
+trim('abc') // => 'abc';
+trim('a bc') // => 'a bc';
 ```
 
 </details>

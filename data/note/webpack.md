@@ -2,7 +2,7 @@
 title: webpack
 date: '2023-01-10'
 update: '2023-01-12'
-tags: ['note', 'webpack']
+tags: ['webpack']
 draft: false
 summary: webpack 是一个用于现代JavaScript应用程序的静态模块打包工具
 ---

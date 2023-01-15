@@ -1,7 +1,7 @@
 ---
 title: 动效 - PPT - 2
 date: '2022-03-05'
-tags: ['note', 'motion']
+tags: ['motion']
 draft: false
 summary: 动效实现方案
 ---

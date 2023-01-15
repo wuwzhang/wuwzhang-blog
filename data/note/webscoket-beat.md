@@ -1,7 +1,7 @@
 ---
 title: WebSocket 心跳重连机制
 date: '2022-05-10'
-tags: ['note', 'js']
+tags: ['js']
 draft: false
 summary: 类型转换
 ---

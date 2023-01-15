@@ -1,3 +1,11 @@
+---
+title: 模块化方案
+date: '2023-01-09'
+tags: ['ems', 'project']
+draft: false
+summary: 模块化方案
+---
+
 ## 模块化方案
 
 ### CJS（commonjs）
@@ -201,6 +209,60 @@ console.log('b.js 先执行')
 // 运行 index.html 执行结果:
 // b.js 先执行
 // a.js
+```
+
+#### 浏览器中如何使用原生的 ESM
+
+##### Native Import: Import from URL
+
+通过 `script[type=module]`，可直接在浏览器中使用原生 ESM。这也使得前端不打包 (Bundless) 成为可能。
+
+```html
+<script type="module">
+  import lodash from 'https://cdn.skypack.dev/lodash'
+</script>
+```
+
+由于前端跑在浏览器中，因此它也只能从 URL 中引入 Package
+
+1. 绝对路径: https://cdn.sykpack.dev/lodash
+2. 相对路径: ./lib.js
+
+现在打开浏览器控制台，把以下代码粘贴在控制台中。由于 http import 的引入，你发现你调试 lodash 此列工具库更加方便了。
+
+```shell
+> lodash = await import('https://cdn.skypack.dev/lodash')
+
+> lodash.get({ a: 3 }, 'a')
+```
+
+![](https://cdn.jsdelivr.net/gh/shfshanyue/assets/2021-11-22/clipboard-2865.638ba7.webp)
+
+##### ImportMap
+
+在 ESM 中，可通过 importmap 使得裸导入可正常工作:
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "lodash": "https://cdn.skypack.dev/lodash"
+    }
+  }
+</script>
+<script type="module">
+  import lodash from 'lodash'
+</script>
+```
+
+##### Import Assertion
+
+```html
+<script type="module">
+  import data from './data.json' assert { type: 'json' }
+
+  console.log(data)
+</script>
 ```
 
 #### CommonJS 的值拷贝

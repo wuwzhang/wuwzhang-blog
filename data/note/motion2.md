@@ -1,7 +1,7 @@
 ---
 title: 动效 - PPT - 1
 date: '2022-03-04'
-tags: ['note', 'motion']
+tags: ['motion']
 draft: false
 summary: 什么样的动效是好动效
 ---
