@@ -1,0 +1,3 @@
+- [npm.devtool: Find the best package for you, Analyze tech stack for your project.](https://npm.devtool.tech/)
+- [skypack: Load optimized npm packages with no install and no build tools.](https://www.skypack.dev/)
+- [npm-update-check: upgrades your package.json dependencies to the latest versions, ignoring specified versions.](https://www.npmjs.com/package/npm-check-updates)

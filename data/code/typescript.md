@@ -3,7 +3,7 @@ title: typescript 函数
 date: '2023-01-06'
 tags: ['function', 'typescript']
 draft: false
-description: pick、omit、Intersection、Diff
+description: pick、omit、Exclude、ReturnType、IF、Awaited、Length、Deep Readonly、RequiredByKeys、PartialByKeys、PartialByKeys、Last、Intersection、Diff
 ---
 
 <TOCInline toc={props.toc} asDisclosure toHeading={2} />

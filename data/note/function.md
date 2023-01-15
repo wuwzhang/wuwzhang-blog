@@ -1,7 +1,7 @@
 ---
 title: 函数式编程
 date: '2022-01-09'
-tags: ['note', 'function']
+tags: ['function']
 draft: false
 summary: 函数式编程（Functional Programming）不是一种新的框架或工具，而是一种以函数为主的编程范式。编程范式也叫编程范型，是一类编程风格，除了函数式编程，常用的还有面向对象编程、命令式编程等。
 ---

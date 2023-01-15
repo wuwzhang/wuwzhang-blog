@@ -1,7 +1,7 @@
 ---
 title: tree sharking
 date: '2023-01-09'
-tags: ['note', 'npm', 'project', 'tree sharking']
+tags: ['npm', 'project', 'tree sharking']
 draft: false
 summary: tree shark原理
 ---

@@ -1,7 +1,7 @@
 ---
 title: event loop
 date: '2022/12/15'
-tags: ['note', 'event loop']
+tags: ['event loop']
 draft: false
 ---
 
