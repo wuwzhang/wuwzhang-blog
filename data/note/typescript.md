@@ -213,3 +213,7 @@ class Employee {
 const emp = new Employee()
 emp.greet('hello')
 ```
+
+## 参考笔记
+
+- [TypeScript 中的泛型你真搞懂了吗？](../blog/93.md#TypeScript中的泛型你真搞懂了吗？)

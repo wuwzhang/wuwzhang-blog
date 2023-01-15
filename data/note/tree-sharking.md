@@ -108,7 +108,7 @@ console.log(42)
 
 - [第 147 期](../blog/147.md)
 
-## 参考文章
+## 来源
 
 - [《模块化系列》彻底理清 AMD,CommonJS,CMD,UMD,ES6](https://zhuanlan.zhihu.com/p/108217164)
 - [Tree Shaking 的原理是什么](https://q.shanyue.tech/fe/webpack/87.html#import)

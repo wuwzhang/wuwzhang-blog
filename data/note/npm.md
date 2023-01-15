@@ -6,6 +6,8 @@ draft: false
 summary: 在日常工作中，代码常用的基本操作如下
 ---
 
+<TOCInline toc={props.toc} asDisclosure toHeading={3} />
+
 # npm
 
 ## npm 发包
@@ -156,6 +158,45 @@ midash-0.2.6.tgz
 
 可以前往 [npm devtool](https://npm.devtool.tech)查看各项数据
 
+### npm install
+
+![](https://static001.geekbang.org/infoq/44/441b966ce86ab30e3da663a50738a9da.png)
+
+首先我们了解下 npm install 这个命令行。上面是执行 npm install 的整个流程，我们看下重点流程的拆解。
+
+PS：本文的 npm 版本特指：v5.4.2 以上版本。低于该版本可能存在不同差异。
+
+#### 检查 config
+
+当执行 npm install 后， npm 首先会从命令行、环境变量和 .npmrc 文件中获取其配置信息。每个 .npmrc 配置文件都是一个 ini 格式的 key = value 参数列。我们通常在这配置私服镜像，例如：
+
+```js
+registry = https://企业npm私有镜像地址/
+```
+
+npm 读取配置数据遵循如下优先级：
+
+- 每个项目的配置文件（/path/to/my/project/.npmrc）
+- 每个用户的配置文件 (~/.npmrc)
+- 全局配置文件 ($PREFIX/etc/npmrc)
+- npm 内置配置文件 (/path/to/npm/npmrc)
+
+#### 2. lock 文件和 package.json
+
+当项目中存在 lock 文件时，会将 lock 文件和 package.json 进行依赖包的信息比对。依赖包信息一致时，则直接使用 lock 文件中的信息进行依赖的安装。否则，则使用 package.json 中的信息进行依赖安装，安装完成后更新 lock 文件。这是两者比对差异的行为。
+
+那么在依赖安装上，首先它会查找本地是否存在缓存，不存在则从网络将资源下载到缓存目录，然后再将资源从缓存目录解析到 node_modules 下。可以如下方式进行缓存目录的查看：
+
+![](https://static001.geekbang.org/infoq/8e/8ef19764d4a54d2c59bc71ccf48fd34e.png)
+
+- content-v2：存放的是 npm 包资源二进制文件。
+- index-v5：存放的是文件的索引，根据它来定位包资源文件。
+- tmp：暂存文件
+
+### 参考笔记
+
+[第 106 期#二、npm install](../blog/106.md####二、npminstall)
+
 ## 修复某个 npm 包的紧急 bug
 
 它实际上是一个 diff 文件，在生产环境中可自动根据 diff 文件与版本号 (根据 patch 文件名存取) 将修复场景复原！
@@ -202,6 +243,10 @@ $ npx patch-package
 - npm ci 不会更新`package-lock.json`
 - npm ci 只能一次安装整个项目：使用此命令无法添加单个依赖项（package.json 被锁定）
 
+### 参考笔记
+
+[第 106 期](../blog/106.md####三、npmci)
+
 ## npm cache
 
 npm 会把所有下载的包，保存在用户文件夹下面。(`~/.npm`)
@@ -245,3 +290,41 @@ node_modules
   "postinstall": "patch-package"
 }
 ```
+
+## pnpm 有什么优势
+
+pnpm 中，它改变了 npm/yarn 的目录结构，采用软链接的方式，避免了 依赖项重复的问题 (doppelgangers) 问题更加节省空间。
+
+它最终生成的 node_modules 如下所示，从中也可以看出它解决了幽灵依赖的问题。
+
+```
+./node_modules/package-a       ->  .pnpm/package-a@1.0.0/node_modules/package-a
+./node_modules/package-b       ->  .pnpm/package-b@1.0.0/node_modules/package-b
+./node_modules/package-c       ->  .pnpm/package-c@1.0.0/node_modules/package-c
+./node_modules/package-d       ->  .pnpm/package-d@1.0.0/node_modules/package-d
+./node_modules/.pnpm/lodash@3.0.0
+./node_modules/.pnpm/lodash@4.0.0
+./node_modules/.pnpm/package-a@1.0.0
+./node_modules/.pnpm/package-a@1.0.0/node_modules/package-a
+./node_modules/.pnpm/package-a@1.0.0/node_modules/lodash     -> .pnpm/package-a@1.0.0/node_modules/lodash@4.0.0
+./node_modules/.pnpm/package-b@1.0.0
+./node_modules/.pnpm/package-b@1.0.0/node_modules/package-b
+./node_modules/.pnpm/package-b@1.0.0/node_modules/lodash     -> .pnpm/package-b@1.0.0/node_modules/lodash@4.0.0
+./node_modules/.pnpm/package-c@1.0.0
+./node_modules/.pnpm/package-c@1.0.0/node_modules/package-c
+./node_modules/.pnpm/package-c@1.0.0/node_modules/lodash     -> .pnpm/package-c@1.0.0/node_modules/lodash@3.0.0
+./node_modules/.pnpm/package-d@1.0.0
+./node_modules/.pnpm/package-d@1.0.0/node_modules/package-d
+./node_modules/.pnpm/package-d@1.0.0/node_modules/lodash     -> .pnpm/package-d@1.0.0/node_modules/lodash@3.0.0
+```
+
+1. 软链接可理解为指向源文件的指针，它是单独的一个文件，仅仅只有几个字节，它拥有独立的 inode
+2. 硬链接与源文件同时指向一个物理地址，它与源文件共享存储数据，它俩拥有相同的 inode
+
+### 参考笔记
+
+[更推荐`pnpm`而不是`npm/yarn`](../blog/25.md#1.更推荐`pnpm`而不是`npm/yarn`)
+
+## 来源
+
+- [山月 - npm](https://q.shanyue.tech/engineering/534.html#%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93)
