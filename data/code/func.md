@@ -11,7 +11,7 @@ description: debounce、throttle、deepClone、shallowEqual、deepEqual、sum、
 ## debounce
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const debounce = (func, delay = 500) => {
@@ -34,7 +34,7 @@ const debounce = (func, delay = 500) => {
 ## throttle
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const throttle = (func, delay = 500) => {
@@ -56,7 +56,7 @@ const throttle = (func, delay = 500) => {
 ## deepClone
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const deepClone = (obj, map = new WeakMap()) => {
@@ -113,7 +113,7 @@ const deepClone = (obj, map = new WeakMap()) => {
 ## shallowEqual
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 function shallowEqual(objA, objB) {
@@ -153,7 +153,7 @@ function shallowEqual(objA, objB) {
 ## deepEqual
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const deepEqual = (objA, objB, map = new WeakMap()) => {
@@ -200,7 +200,7 @@ const deepEqual = (objA, objB, map = new WeakMap()) => {
 ## sum
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const sum = (num1, num2) => {
@@ -218,7 +218,7 @@ const sum = (num1, num2) => {
 ## sleep/delay
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```ts
 const sleep = (t = 0) => new Promise((resolve) => setTimeout(resolve, t))
@@ -235,7 +235,7 @@ const delay = <T extends (...args: any[]) => any>(
 ## shuffle
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```ts
 const shuffle = (list) => list.sort((x, y) => Math.random() - 0.5)
@@ -245,8 +245,12 @@ const shuffle = (list) => list.sort((x, y) => Math.random() - 0.5)
 
 ## jsonp
 
+JSONP 的原理很简单，就是利用 `<script>` 标签没有跨域限制的漏洞。通过 `<script>` 标签指向一个需要访问的地址并提供一个回调函数来接收数据当需要通讯时。
+
+JSONP 使用简单且兼容性不错，但是只限于 get 请求。
+
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 function stringify(data) {
@@ -282,7 +286,7 @@ function jsonp({ url, onData, params }) {
 ## toPascalCase
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const toPascalCase = (str: string): string =>
@@ -322,7 +326,7 @@ console.log(toKebabCase('GetElementById'))
 剔除对象中指定数组中的键名
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const omit = (obj, arr) =>
@@ -340,7 +344,7 @@ omit({ a: 1, b: '2', c: 3 }, ['b']) // { 'a': 1, 'c': 3 }
 按指定长度给数组组分
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const chunk = (arr, size) =>
@@ -356,7 +360,7 @@ chunk([1, 2, 3, 4, 5], 2) // [[1, 2], [3, 4], [5]]
 ## deepGet
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const deepGet = (obj, keys) =>
@@ -380,7 +384,7 @@ deepGet(data, ['foo', 'bar', 'baz', 8, 'foz']) // null
 ## unzip
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const unzip = (arr) =>
@@ -405,7 +409,7 @@ unzip([
 根据给定的函数对数组的元素进行分组，并返回每个组中元素的计数
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const countBy = (arr, fn) =>
@@ -427,7 +431,7 @@ countBy([{ count: 5 }, { count: 10 }, { count: 5 }], (x) => x.count)
 判断是否为合法的`json`数据
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const isValidJSON = (str) => {
@@ -449,7 +453,7 @@ isValidJSON(null) // true
 ## isEmpty
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 isEmpty([]) // true
@@ -471,7 +475,7 @@ const isEmpty = (val) => val == null || !(Object.keys(val) || val).length
 判断给到的值是否为数字
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const validateNumber = (n) => {
@@ -489,7 +493,7 @@ validateNumber(1 / 0) // false
 ## trim
 
 <details>
-	<summary>代码</summary>
+ <summary>代码</summary>
 
 ```js
 const trim = (str) => (typeof str === 'string' ? str?.replace(/(^\s*)|(\s*$)/g, '') : str)

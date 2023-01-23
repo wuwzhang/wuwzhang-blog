@@ -155,6 +155,11 @@ git pull 和 git fetch 的理解
 
 - git pull = git fetch + git merge
 
+## git fetch 和 git pull
+
+- git pull：相当于是从远程获取最新版本并 merge 到本地
+- git fetch：相当于是从远程获取最新版本到本地，不会自动 merge
+
 ## 工具
 
 [Git](../blog/56.md#1.Git)
