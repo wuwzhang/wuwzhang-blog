@@ -408,7 +408,7 @@ app.listen(3000)
 
 ## 压缩前端项目中 JS 的体积
 
-1. terser (opens new window)或者 uglify (opens new window)，及流行的使用 Rust 编写的 swc 压缩混淆化 JS。
+1. terser 或者 uglify ，及流行的使用 Rust 编写的 swc 压缩混淆化 JS。
 2. gzip 或者 brotli 压缩，在网关处(nginx)开启
 3. 使用 webpack-bundle-analyzer 分析打包体积，替换占用较大体积的库，如 moment -> dayjs
 4. 使用支持 Tree-Shaking 的库，对无引用的库或函数进行删除，如 lodash -> lodash/es

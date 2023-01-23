@@ -8,6 +8,8 @@ summary: 模块化方案
 
 ## 模块化方案
 
+- [思维导图](https://www.processon.com/view/link/5c8409bbe4b02b2ce492286a#map)
+
 ### CJS（commonjs）
 
 commonjs 是 Node 中的模块规范，通过 require 及 exports 进行导入导出 (进一步延伸的话，module.exports 属于 commonjs2)，采用同步加载模块，而加载的文件资源大多数在本地服务器，所以执行速度或时间没问题
@@ -225,8 +227,8 @@ console.log('b.js 先执行')
 
 由于前端跑在浏览器中，因此它也只能从 URL 中引入 Package
 
-1. 绝对路径: https://cdn.sykpack.dev/lodash
-2. 相对路径: ./lib.js
+1. 绝对路径: `<https://cdn.sykpack.dev/lodash>`
+2. 相对路径: `./lib.js`
 
 现在打开浏览器控制台，把以下代码粘贴在控制台中。由于 http import 的引入，你发现你调试 lodash 此列工具库更加方便了。
 

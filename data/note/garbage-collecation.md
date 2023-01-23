@@ -19,22 +19,46 @@ summary: 什么是垃圾：对象不在被引用或不能从根上访问到
 
 > 垃圾回收算法
 
-- 引用计数
-  - 优点
-    - 发现垃圾立即回收
-    - 最大程度减少程序暂停
-  - 缺点
-    - 无法回收循环引用的对象
-    - 时间开销大
-- 标记清除
-  - 优点
-    - 可以解决对象循环引用
-  - 缺点
-    - 地址不连续，碎片化，空间浪费
-- 标记整理
-  - 相比于标记清除，多一步整理碎片空间的步骤
-- 分待回收
-  - v8 垃圾回收策略
+### 引用计数
+
+> 对象有没有其他对象引用到它
+
+- 优点
+  - 发现垃圾立即回收
+  - 最大程度减少程序暂停
+- 缺点
+  - 无法回收循环引用的对象
+  - 时间开销大
+
+IE 6, 7 使用引用计数方式对 DOM 对象进行垃圾回收。该方式常常造成对象被循环引用时内存发生泄漏：
+
+```js
+var div
+window.onload = function () {
+  div = document.getElementById('myDivElement')
+  div.circularReference = div
+  div.lotsOfData = new Array(10000).join('*')
+}
+```
+
+### 标记清除
+
+> 对象是否可以获得
+
+这个算法假定设置一个叫做根（root）的对象（在 Javascript 里，根是全局对象）。垃圾回收器将定期从根开始，找所有从根开始引用的对象，然后找这些对象引用的对象……从根开始，垃圾回收器将找到所有可以获得的对象和收集所有不能获得的对象。
+
+- 优点
+  - 可以解决对象循环引用
+- 缺点
+  - 地址不连续，碎片化，空间浪费
+
+### 标记整理
+
+- 相比于标记清除，多一步整理碎片空间的步骤
+
+### 分代回收
+
+- v8 垃圾回收策略
 
 ## v8 垃圾回收
 
@@ -63,6 +87,24 @@ summary: 什么是垃圾：对象不在被引用或不能从根上访问到
   - 标记清除完成垃圾回收
   - 晋升空间不足时，使用标记整理进行空间优化
   - 增量标记算法提升效率
+
+```ts
+enum AllocationSpace {
+  // TODO(v8:7464): Actually map this space's memory as read-only.
+  RO_SPACE, // 不变的对象空间
+  NEW_SPACE, // 新生代用于 GC 复制算法的空间
+  OLD_SPACE, // 老生代常驻对象空间
+  CODE_SPACE, // 老生代代码对象空间
+  MAP_SPACE, // 老生代 map 对象
+  LO_SPACE, // 老生代大空间对象
+  NEW_LO_SPACE, // 新生代大空间对象
+
+  FIRST_SPACE = RO_SPACE,
+  LAST_SPACE = NEW_LO_SPACE,
+  FIRST_GROWABLE_PAGED_SPACE = OLD_SPACE,
+  LAST_GROWABLE_PAGED_SPACE = MAP_SPACE,
+}
+```
 
 ## 常见内存泄露情况
 
