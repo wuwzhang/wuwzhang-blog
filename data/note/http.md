@@ -1,5 +1,5 @@
 ---
-title: JS基础
+title: HTTP 笔记
 date: '2022-05-12'
 tags: ['HTTP', 'DNS']
 draft: false

@@ -1,5 +1,5 @@
 ---
-title: JS基础
+title: 设计模式
 date: '2022-08-03'
 tags: ['ES6', 'JS']
 draft: false

@@ -6,6 +6,50 @@ draft: true
 description: heap
 ---
 
+## 冒泡排序
+
+![冒泡](https://www.runoob.com/wp-content/uploads/2019/03/bubbleSort.gif)
+
+```js
+const bubble = (arr) => {
+  for (let i = 0, len = arr.length; i < len - 1; i++) {
+    for (let j = 0; j < len - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        // 相邻元素两两对比
+        let tmp = arr[j + 1] // 元素交换
+        arr[j + 1] = arr[j]
+        arr[j] = tmp
+      }
+    }
+  }
+}
+```
+
+## 插入排序
+
+![插入](https://www.runoob.com/wp-content/uploads/2019/03/insertionSort.gif)
+
+```js
+const insertSort = (arr) => {
+  for (let i = 1, len = arr.length; i < len; i++) {
+    let pre = i - 1,
+      current = arr[i]
+    while (pre >= 0 && arr[pre] > current) {
+      arr[pre + 1] = arr[pre]
+      pre--
+    }
+
+    arr[pre + 1] = current
+  }
+
+  return arr
+}
+```
+
+## 选择排序
+
+![选择](https://www.runoob.com/wp-content/uploads/2019/03/selectionSort.gif)
+
 ## 堆排序
 
 ```js
