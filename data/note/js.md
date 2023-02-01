@@ -71,3 +71,146 @@ function test() {
   })
 }
 ```
+
+## 请求取消
+
+### XHR
+
+```js
+const xhr = new XMLHttpRequest(),
+  method = 'GET',
+  url = 'https://developer.mozilla.org/'
+xhr.open(method, url, true)
+
+xhr.send()
+
+// 取消发送请求
+xhr.abort()
+```
+
+### fetch
+
+```js
+const controller = new AbortController()
+const signal = controller.signal
+
+const downloadBtn = document.querySelector('.download');
+const abortBtn = document.querySelector('.abort');
+
+downloadBtn.addEventListener('click', fetchVideo);
+
+// 点击取消按钮时，取消请求的发送
+abortBtn.addEventListener('click', function() {
+  controller.abort();
+  console.log('Download aborted');
+});
+
+function fetchVideo() {
+  ...
+  fetch(url, {signal}).then(function(response) {
+    ...
+  }).catch(function(e) {
+   // 请求被取消之后将会得到一个 AbortError
+    reports.textContent = 'Download error: ' + e.message;
+  })
+}
+```
+
+### axios
+
+```js
+const CancelToken = axios.CancelToken
+const source = CancelToken.source()
+
+axios
+  .get('/user/12345', {
+    cancelToken: source.token,
+  })
+  .catch(function (thrown) {
+    if (axios.isCancel(thrown)) {
+      console.log('Request canceled', thrown.message)
+    } else {
+      // handle error
+    }
+  })
+
+axios.post(
+  '/user/12345',
+  {
+    name: 'new name',
+  },
+  {
+    cancelToken: source.token,
+  }
+)
+
+// cancel the request (the message parameter is optional)
+source.cancel('Operation canceled by the user.')
+```
+
+## setTimeout 为什么最小只能设置 4ms，如何实现一个 0ms 的 setTimeout?
+
+![4ms](https://user-images.githubusercontent.com/46242125/128295969-fc674ccf-40b2-475c-8c32-6432dd7f7ff8.png)
+
+```js
+let timeouts = []
+const messageName = 'zero-settimeout'
+
+function setTimeoutZero(fn) {
+  timeouts.push(fn)
+  window.postMessage(messageName, '*')
+}
+
+function handleMessage(evt) {
+  if (evt.source == window && evt.data === messageName) {
+    if (timeouts.length > 0) {
+      const f = timeouts.shift()
+      f()
+    }
+  }
+}
+
+window.addEventListener('message', handleMessage)
+
+window.zeroSettimeout = setTimeoutZero
+```
+
+## JS 中异步任务为何分为微任务与宏任务
+
+为了减少锁的使用和锁的范围，Chromium 采用了一个比较巧妙的方法：简单来讲，MessageLoop 维护有两个队列，一个 work_queue，一个 incoming_queue。消息循环不断从 work_queue 取任务并执行，新加入任务放入 incoming_queue。当 work_queue 中的任务都执行完后，再把 incoming_queue 拷贝到 work_queue（需要加锁）。这样避免了每执行一个任务都要去加锁。
+
+## 遍历一个对象
+
+- for in
+- Object.keys、Object.entries
+- Reflect.ownKeys
+- Symbol.iterator
+
+```js
+const obj = { a: 1, b: 2, c: 3 }
+
+obj[Symbol.iterator] = function () {
+  let i = 0
+  const keys = Object.keys(this)
+  return {
+    next: () => {
+      return i <= keys.length - 1
+        ? { value: this[keys[i++]], done: false }
+        : { value: undefined, done: true }
+    },
+  }
+}
+```
+
+## 反码和补码
+
+- 反码: 反码按位取反
+- 补码: 正数和 0 的补码就是该数字本身，负数的补码则是反码
+
+## ES6 代码转成 ES5
+
+- 将代码字符串解析成抽象语法树，即所谓的 AST
+- 对 AST 进行处理，在这个阶段可以对 ES6 代码进行相应转换，即转成 ES5 代码
+- 根据处理后的 AST 再生成代码字符串
+
+可以使用 `@babel/parser` 的 parse 方法，将代码字符串解析成 AST；使用 `@babel/core` 的 transformFromAstSync 方法，对 AST 进行处理，将其转成 ES5 并生成相应的代码字符串；过程中，可能还需要使用 `@babel/traverse` 来获取依赖文件等
