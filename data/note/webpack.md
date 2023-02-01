@@ -15,7 +15,7 @@ summary: webpack 是一个用于现代JavaScript应用程序的静态模块打�
 
 当 webpack 处理应用程序时，它会在内部构建一个依赖图，此依赖图对应映射到项目所需的每个模块（不再局限 js 文件），并生成一个或多个 bundle
 
-![](https://static.vue-js.com/9ce194a0-a578-11eb-85f6-6fac77c0c9b3.png)
+![webpack](https://static.vue-js.com/9ce194a0-a578-11eb-85f6-6fac77c0c9b3.png)
 
 - 编译代码能力: 浏览器兼容问题
 - 模块整合能力: 解决浏览器频繁请求文件的问题
@@ -23,7 +23,7 @@ summary: webpack 是一个用于现代JavaScript应用程序的静态模块打�
 
 ## 运行流程
 
-![](https://static.vue-js.com/b566d400-a658-11eb-85f6-6fac77c0c9b3.png)
+![运行流程](https://static.vue-js.com/b566d400-a658-11eb-85f6-6fac77c0c9b3.png)
 
 ### 初始化流程
 
@@ -87,7 +87,7 @@ module.exports = {
 - seal 封装构建结果
 - emit 把各个 chunk 输出到结果文件
 
-![](https://static.vue-js.com/d77fc560-a658-11eb-85f6-6fac77c0c9b3.png)
+![Compiler](https://static.vue-js.com/d77fc560-a658-11eb-85f6-6fac77c0c9b3.png)
 
 ## loader
 
@@ -123,8 +123,23 @@ loader 支持链式调用，链中的每个 loader 会处理之前已处理过�
 
 ### [常见 loader](https://cloud.tencent.com/developer/chapter/17844)
 
-- style-loader: 将 css 添加到 DOM 的内联样式标签 style 里
-- css-loader :允许将 css 文件通过 require 的方式引入，并返回 css 代码
+- style-loader: 将 css 添加到 DOM 的内联样式标签 style 里，原理为使用 DOM API 手动构建 style 标签，并将 CSS 内容注入到 style 中
+
+```js
+module.exports = function (source) {
+  return `
+    function injectCss(css) {
+      const style = document.createElement('style')
+      style.appendChild(document.createTextNode(css))
+      document.head.appendChild(style)
+    }
+
+    injectCss(\`${source}\`)
+  `
+}
+```
+
+- css-loader: 允许将 css 文件通过 require 的方式引入，并返回 css 代码，css-loader 的原理就是 postcss，借用 postcss-value-parser 解析 CSS 为 AST，并将 CSS 中的 url() 与 @import 解析为模块
 - less-loader: 处理 less
 - sass-loader: 处理 sass
 - postcss-loader: 用 postcss 来处理 CSS
@@ -264,14 +279,14 @@ module.exports = ConsoleLogOnBuildWebpackPlugin;
 - DefinePlugin: 允许在编译时创建配置的全局对象，是一个 webpack 内置的插件，不需要安装
 - copy-webpack-plugin: 复制文件或目录到执行区域，如 vue 的打包过程中，如果我们将一些文件放到 public 的目录下，那么这个目录会被复制到 dist 文件夹中
 
-![](https://static.vue-js.com/bd749400-a7c2-11eb-85f6-6fac77c0c9b3.png)
+![常见 plugins](https://static.vue-js.com/bd749400-a7c2-11eb-85f6-6fac77c0c9b3.png)
 
 ## loader 和 plugin 区别
 
 - loader 是文件加载器，能够加载资源文件，并对这些文件进行一些处理，诸如编译、压缩等，最终一起打包到指定的文件中
 - plugin 赋予了 webpack 各种灵活的功能，例如打包优化、资源管理、环境变量注入等，目的是解决 loader 无法实现的其他事
 
-![](https://static.vue-js.com/9a04ec40-a7c2-11eb-ab90-d9ae814b240d.png)
+![loader 和 plugin 区别](https://static.vue-js.com/9a04ec40-a7c2-11eb-ab90-d9ae814b240d.png)
 
 - loader 运行在打包文件之前
 - plugins 在整个编译周期都起作用
@@ -565,9 +580,75 @@ Tree Shaking 指基于 ES Module 进行静态分析，通过 AST 将用不到的
 
 可以通过 InlineChunkHtmlPlugin 插件将一些 chunk 的模块内联到 html，如 runtime 的代码（对模块进行解析、加载、模块信息相关的代码），代码量并不大，但是必须加载的
 
+### 加载 JSON
+
+在现代前端中，我们把它视为 module 时，使用 import 引入资源
+
+```json
+// user.json 中内容
+{
+  "id": 10086,
+  "name": "shanyue",
+  "github": "https://github.com/shfshanyue"
+}
+```
+
+```js
+import user from './user.json'
+```
+
+这样它将被视为普通的 Javascript
+
+```js
+export default {
+  id: 10086,
+  name: 'shanyue',
+  github: 'https://github.com/shfshanyue',
+}
+```
+
+在 webpack 中通过 loader 处理此类非 JS 资源，以下为一个 json-loader 的示例:
+
+```js
+module.exports = function (source) {
+  const json = typeof source === 'string' ? source : JSON.stringify(source)
+  return `module.exports = ${json}`
+}
+```
+
+### 加载图片
+
+它将替换为它自身的路径。示例如下
+
+```js
+export default `$PUBLIC_URL/assets/image/main.png`
+
+// import image
+import mainImage from 'main.png'
+
+;<img src={mainImage} />
+```
+
 ### 总结
 
 关于 webpack 对前端性能的优化，可以通过文件体积大小入手，其次还可通过分包的形式、减少 http 请求次数等方式，实现对前端性能的优化
+
+## 如何在运行时拿到打包阶段的变量
+
+```shell
+yarn build --theme=dark
+```
+
+```js
+const theme = (process.argv.find((v) => v.startsWith('--theme')) || '--theme=light').slice(8)
+
+// process.env.NODE_ENV
+
+new webpack.DefinePlugin({
+  THEME: JSON.stringify(theme),
+  'process.env.GET_USER': JSON.stringify(process.env.GET_USER),
+})
+```
 
 ## 来源
 

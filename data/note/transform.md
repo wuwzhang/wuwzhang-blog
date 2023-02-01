@@ -9,7 +9,7 @@ summary: 类型转换分为强制转换（显示转换）和 自动转换（隐�
 <TOCInline toc={props.toc} asDisclosure toHeading={3} />
 # 类型转换
 
-## 常见的类型转换有：
+## 常见的类型转换有
 
 - 强制转换（显示转换）
 - 自动转换（隐式转换）

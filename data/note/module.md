@@ -34,6 +34,8 @@ require(`./${a}`)
 
 ## AMD（Asynchronous Module Definition）
 
+> 依赖必须提前声明好
+
 意思就是"异步模块定义"。它采用异步方式加载模块，模块的加载不影响它后面语句的运行。所有依赖这个模块的语句，都定义在一个回调函数中，等到加载完成之后，这个回调函数才会运行。其中 RequireJS 是最佳实践者。
 
 ```js
@@ -75,6 +77,8 @@ define(function (require) {
 
 ## CMD(Common Module Definition)
 
+> 支持动态引入依赖文件
+
 规范主要是 Sea.js 推广中形成的，一个文件就是一个模块，可以像 Node.js 一般书写模块代码。主要在浏览器中运行，当然也可以在 Node.js 中运行。
 
 它与 AMD 很类似，不同点在于：AMD 推崇依赖前置、提前执行，CMD 推崇依赖就近、延迟执行。
@@ -114,6 +118,8 @@ define(function(require, exports, module) {
 
 ## UMD（Universal Module Definition）
 
+> UMD：兼容 AMD，CommonJS 模块化语法
+
 该模式主要用来解决 CommonJS 模式和 AMD 模式代码不能通用的问题，并同时还支持老式的全局变量规范。既可以在 node/webpack 环境中被 require 引用，也可以在浏览器中直接用 CDN 被 script.src 引入
 
 ```js
@@ -145,6 +151,8 @@ define(function(require, exports, module) {
 
 ## esm (es module)
 
+> ES6 引入的模块化
+
 esm 是 tc39 对于 ESMAScript 的模块话规范，在 Node 及 浏览器中均支持。
 
 esm 是未来的趋势，目前一些 CDN 厂商，前端构建工具均致力于 cjs 模块向 esm 的转化，比如 skypack、 snowpack、vite 等。
@@ -155,6 +163,8 @@ esm 是未来的趋势，目前一些 CDN 厂商，前端构建工具均致力�
 - esm 同时兼容在 node 环境下运行
 - cjs 模块输出的是一个值的拷贝，esm 输出的是值的引用，输出接口动态绑定
 - cjs 模块是运行时加载，esm 是编译时加载
+  - CommonJS 在引入时是加载整个模块，生成一个对象，然后再从这个生成的对象上读取方法和属性。
+  - ESModule 不是对象，而是通过 export 暴露出要输出的代码块，在 import 时使用静态命令的方法引用指定的输出代码块，并在 import 语句处执行这个要输出的代码，而不是直接加载整个模块。
 - esm 模块的导入导出，通过 import 和 export 来确定。 可以和 cmj 模块混合使用。
 
 #### 使用

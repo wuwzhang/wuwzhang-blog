@@ -244,7 +244,7 @@ let lessons = filterLesson.map((v) => {
 console.log(JSON.stringify(lessons, null, 2))
 ```
 
-#### 14、汉字和字符属性
+## 14、汉字和字符属性
 
 ```js
 let name = 'hello,你好中国,upup....加油！！！'
@@ -261,7 +261,7 @@ let hanzi = name.match(/[\u4e00-\u9fff]+/g)
 console.log(hanzi) // ["你好中国", "加油"]
 ```
 
-#### 15、lastIndex 属性的使用
+## 15、lastIndex 属性的使用
 
 ```js
 let name = 'heiqiu1'
@@ -279,7 +279,7 @@ while ((res = reg.exec(name))) {
 }
 ```
 
-#### 16、有效率的 y 模式
+## 16、有效率的 y 模式
 
 > - y 模式表示匹配到不符合的就停掉，不会继续往后匹配，必须连续的符合条件的
 
@@ -299,7 +299,7 @@ while ((res = reg.exec(name))) {
 console.log(qqList) // ["1111111111", "22224545488", "6411313416544"]
 ```
 
-#### 17、原子表的基本使用
+## 17、原子表的基本使用
 
 > - [] 原子表表示里面的内容时或者的关系,检测的内容在其中就可以被匹配到
 
@@ -314,7 +314,7 @@ let reg = /^\d{4}([-\/])(s)\d{2}\1\2\d{2}$/
 console.log(time.match(reg))
 ```
 
-#### 18、区间匹配
+## 18、区间匹配
 
 > - [a-z] 匹配 26 位小写字母
 > - [0-9] 匹配 0-9 之间的数字，包含 0 和 9
@@ -332,7 +332,7 @@ let objreg = /[a-z]+/g
 console.log(a.match(objreg)) // ["a", "b", "c"]
 ```
 
-#### 19、排除匹配
+## 19、排除匹配
 
 ```js
 let name = 'heiqiu'
@@ -341,7 +341,7 @@ let reg = /[^iu]+/g
 console.log(name.match(reg))
 ```
 
-#### 20、原子表里的字符不会解析
+## 20、原子表里的字符不会解析
 
 ```js
 let name = '(heiqiu).+'
@@ -350,7 +350,7 @@ let reg = /[().+]/g
 console.log(name.match(reg)) // ["(", ")", ".", "+"]
 ```
 
-#### 21、使用正则去除字符串中的所有空格
+## 21、使用正则去除字符串中的所有空格
 
 ```js
 let title = '  111  2 33  '
@@ -361,7 +361,7 @@ function trimreg(data) {
 console.log(trimreg(title)) // 111233
 ```
 
-#### 22、认识原子组
+## 22、认识原子组
 
 > - 一个小括号包起来的东西被称为原子组，\1 表示与第一个原子组相同的内容
 
@@ -380,7 +380,7 @@ let reg = /((黑球)(土豆))\1\2/g
 console.log(title.match(reg))
 ```
 
-#### 23、邮箱验证使用原子组
+## 23、邮箱验证使用原子组
 
 > - 验证邮箱表达式：`/\^\[\da-z][\w.]+@(\w+.)+(com|cn|org)$/i`
 > - 含义：以数字或者字母开头，数字字母下划线为主体，一个 @符号，后面跟上数字字母下划线和小数点，可以为多个，以 com 或 cn 或 org 结尾
@@ -397,7 +397,7 @@ let emailreg = /^[\da-z][\w.]+@(\w+\.)+(com|cn|org)$/i
 console.log(emailreg.test(mailAdd))
 ```
 
-#### 24、嵌套分组和不记录分组
+## 24、嵌套分组和不记录分组
 
 > - 原子组里面加上?: 表示不记录该原子组，但是原子组的功能仍然生效
 
@@ -419,7 +419,7 @@ while ((res = reg.exec(urlStr))) {
 console.log(urls) // ["www.baidu.com", "taobao.cn", "www.zhifubao.com"]
 ```
 
-#### 25、重复匹配的使用
+## 25、重复匹配的使用
 
 > - +：一个或者多个
 > - `\*`：零个或者多个
@@ -441,7 +441,7 @@ console.log(name.match(/so?/)) // so
 console.log(name.match(/so{1,2}/)) // soo
 ```
 
-#### 26、禁止贪婪
+## 26、禁止贪婪
 
 > - ? 禁止贪婪，会匹配最小的那个单位
 
@@ -465,7 +465,7 @@ reg = /so{2,5}?/g
 console.log(name.match(reg)) // ["soo"]
 ```
 
-#### 27、使用 matchAll 完成全局匹配
+## 27、使用 matchAll 完成全局匹配
 
 > - matchAll 获取到的是一个迭代对象，可以被遍历到
 
@@ -488,7 +488,7 @@ for (let item of listAll) {
 console.log(htmlData) // ["哈哈哈,sdfsdf", "嘿嘿嘿", "呵呵呵", "嘎嘎嘎"]
 ```
 
-#### 28、字符串的 search 方法和 match 方法
+## 28、字符串的 search 方法和 match 方法
 
 > - 字符串的 search 方法，找到后返回字符串所在下标，否则返回 -1
 > - 字符串的 match 方法,在字符串内检索指定的值，或找到一个或多个正则表达式的匹配
@@ -507,7 +507,7 @@ let reg = /https?:\/\/(\w+)?(\w+\.)+(com|cn)/g
 console.log(urls.match(reg))
 ```
 
-#### 29、$ 符在正则替换中的使用
+## 29、$ 符在正则替换中的使用
 
 > - $ : `$n` 代表原子组
 > - $` : 获取替换元素左边的元素
@@ -527,7 +527,7 @@ let name = '123你好+++'
 console.log(name.replace('你好', "$`$&$'")) // 123123你好++++++
 ```
 
-#### 30、原子组起别名
+## 30、原子组起别名
 
 > - `使用 ?<xx> 起原子组的别名`
 > - `使用 $<xx> 读取别名`
@@ -543,7 +543,7 @@ let newHtml = html.replace(reg, `<i>$<text></i>`)
 console.log(newHtml)
 ```
 
-#### 31、后等断言
+## 31、后等断言
 
 > - (?=xxx) 匹配右侧是 xxx 的字段
 
@@ -558,7 +558,7 @@ let str2 = /猫(?=土豆)/g
 console.log(title.replace(str1, '黑猫').replace(str2, '灰猫'))
 ```
 
-#### 32、前等断言
+## 32、前等断言
 
 > - `(?<=href=(['"])) 前面是 href = 单引号或者双引号的字段`
 >   需求：将网址全部替换为 "https://ant.design"
@@ -574,7 +574,7 @@ let reg = /(?<=href=(['"])).+(?=\1)/gi
 console.log(html.replace(reg, 'https://ant.design'))
 ```
 
-#### 33、后不等断言
+## 33、后不等断言
 
 > ?! 表示不是以什么什么结尾
 
@@ -586,7 +586,7 @@ let reg = /\S+(?!\d+)$/g
 console.log(title.match(reg).join('')) // 新增人数：10人
 ```
 
-#### 34、前不等断言
+## 34、前不等断言
 
 > `?<! 匹配前面不是什么的字段`
 
@@ -597,7 +597,7 @@ let reg = /(?<!\d+)[a-z]+/g
 console.log(name.match(reg)) // ["abc", "ef"]
 ```
 
-#### 35、使用断言模糊电话号
+## 35、使用断言模糊电话号
 
 ```js
 // 不使用断言
