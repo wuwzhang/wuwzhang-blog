@@ -265,3 +265,81 @@ type Compute<A extends any> = A extends Function ? A : { [K in keyof A]: A[K] }
 type Merge<O1 extends object, O2 extends object> = Compute<O1 & Omit<O2, keyof O1>>
 type C1C2 = Merge<C1, C2>
 ```
+
+## 案例
+
+
+```ts
+import * as React from 'react'
+
+type Props = {
+  type: number
+  onChange: (v: number) => void
+} | {
+  type?: never
+  onChange: (v: string) => void
+}
+
+function MyComp (props: Props) {
+  return <div />
+}
+
+const App = <>
+  <MyComp onChange={v => console.log(v)}/>
+  <MyComp type={1} onChange={v => console.log(v)}/>
+</>
+```
+
+### as const 枚举
+
+```ts
+const ITEM = ['1', '2', '3'] as const
+type IItem = typeof ITEM[number]
+```
+
+```tsx
+type ButtonOnChangeType = React.ComponentProps<typeof Button>
+
+// 获取和使用某个回调函数的类型
+type ButtonOnChangeType = React.ComponentProps<typeof Button>["onChange"];
+const handleChange:ButtonOnChangeType = (value)=>{
+  
+}
+
+// 获取checkbox的Options中的一项的类型
+// 获取options数组类型
+type CheckboxOptionType = React.ComponentProps<
+  typeof Checkbox.Group
+>['options'];
+
+// 去除undifine
+type CheckboxOptionTypeNoUndefine = NonNullable<CheckboxOptionType>;
+
+// 去除string并获取数组中某一项的类型
+type CheckboxOptionTypeItem = CheckboxOptionTypeNoUndefine extends string
+  ? CheckboxOptionTypeNoUndefine
+  : CheckboxOptionTypeNoUndefine[number];
+
+interface A {
+  /** when passing down the state setter function returned by `useState` to a child component. `number` is an example, swap out with whatever the type of your state */
+  setState: React.Dispatch<React.SetStateAction<number>>;
+  /** function type syntax that takes an event (VERY COMMON) */
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  /** alternative function type syntax that takes an event (VERY COMMON) */
+  onClick(event: React.MouseEvent<HTMLButtonElement>): void;
+  dict1: {
+    [key: string]: MyTypeHere;
+  };
+  children?: React.ReactNode; // best, accepts everything React can render
+  childrenElement: JSX.Element; // A single React element
+  style?: React.CSSProperties; // to pass through style props
+  onChange?: React.FormEventHandler<HTMLInputElement>; // form events! the generic parameter is the type of event.target
+  //  more info: https://react-typescript-cheatsheet.netlify.app/docs/advanced/patterns_by_usecase/#wrappingmirroring
+  props: Props & React.ComponentPropsWithoutRef<"button">; // to impersonate all the props of a button element and explicitly not forwarding its ref
+  props2: Props & React.ComponentPropsWithRef<MyButtonWithForwardRef>; // to impersonate all the props of MyButtonForwardedRef and explicitly forwarding its ref
+}
+```
+
+```ts
+type ITab = NonNullable<TabsProps['items']>[number]
+```
