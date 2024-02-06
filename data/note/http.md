@@ -407,3 +407,34 @@ CNAME 实际上在域名解析的过程中承担了中间人（或者说代理�
 回源的时候二级缓存只找一级缓存，一级缓存没有才回源站，可以有效地减少真正的回源
 
 现在的商业 CDN 命中率都在 90% 以上，相当于把源站的服务能力放大了 10 倍以上
+
+
+### post为什么会发送两次请求？
+
+> 同源策略是一个重要的安全策略，它用于限制一个源的文档或者它加载的脚本如何能与另一个源的资源进行交互。
+
+如果两个 URL 的协议、主机和端口都相同，我们就称这两个 URL 同源。
+
+#### 简单请求
+不会触发 CORS 预检请求。这样的请求为 简单请求，。若请求满足所有下述条件，则该请求可视为 简单请求：
+1. HTTP 方法限制：只能使用 GET、HEAD、POST 这三种 HTTP 方法之一。如果请求使用了其他 HTTP 方法，就不再被视为简单请求。
+2. 自定义标头限制：请求的 HTTP 标头只能是以下几种常见的标头：Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type（仅限于 application/x-www-form-urlencoded、multipart/form-data、text/plain）。HTML 头部 header field 字段：DPR、Download、Save-Data、Viewport-Width、WIdth。如果请求使用了其他标头，同样不再被视为简单请求。
+3. 请求中没有使用 ReadableStream 对象。
+4. 不使用自定义请求标头：请求不能包含用户自定义的标头。
+5. 请求中的任意 XMLHttpRequestUpload 对象均没有注册任何事件监听器；XMLHttpRequestUpload 对象可以使用 XMLHttpRequest.upload 属性访问
+
+#### 预检请求
+非简单请求的 CORS 请求，会在正式通信之前，增加一次 HTTP 查询请求，称为 预检请求。
+
+需预检的请求要求必须首先使用 `OPTIONS` 方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。预检请求 的使用，可以避免跨域请求对服务器的用户数据产生未预期的影响。
+
+它首先会发起一个预检请求,预检请求的头信息包括两个特殊字段：
+
+- Access-Control-Request-Method：该字段是必须的，用来列出浏览器的 CORS 请求会用到哪些 HTTP 方法，上例是 POST。
+- Access-Control-Request-Headers：该字段是一个逗号分隔的字符串，指定浏览器 CORS 请求会额外发送的头信息字段，上例是 content-type,x-secsdk-csrf-token。
+- access-control-allow-origin：在上述例子中，表示 https://juejin.cn 可以请求数据，也可以设置为* 符号，表示统一任意跨源请求。
+- access-control-max-age：该字段可选，用来指定本次预检请求的有效期，单位为秒。上面结果中，有效期是 1 天（86408 秒），即允许缓存该条回应 1 天（86408 秒），在此期间，不用发出另一条预检请求。
+
+一旦服务器通过了 预检请求，以后每次浏览器正常的 CORS 请求，就都跟简单请求一样，会有一个 Origin 头信息字段。服务器的回应，也都会有一个 Access-Control-Allow-Origin 头信息字段
+
+![Alt text](image-1.png)

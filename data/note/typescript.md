@@ -59,7 +59,7 @@ console.log(Direction[0]) // Up
 
 一个接口所描述的是一个对象相关的属性和方法，但并不提供具体创建此对象实例的方法
 
-## type 和 interface 区别
+## [type 和 interface 区别](https://juejin.cn/post/7233247978768580668)
 
 - 类型别名不仅可以用来表示基本类型，还可以用来表示对象类型、联合类型、元组和交集;interface 仅限于描述对象类型。
 - 类无法实现联合类型

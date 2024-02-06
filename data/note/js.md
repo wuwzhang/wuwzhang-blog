@@ -214,3 +214,6 @@ obj[Symbol.iterator] = function () {
 - 根据处理后的 AST 再生成代码字符串
 
 可以使用 `@babel/parser` 的 parse 方法，将代码字符串解析成 AST；使用 `@babel/core` 的 transformFromAstSync 方法，对 AST 进行处理，将其转成 ES5 并生成相应的代码字符串；过程中，可能还需要使用 `@babel/traverse` 来获取依赖文件等
+
+
+- [JS阻塞渲染，这么多年我理解错啦？](https://segmentfault.com/a/1190000041729574)
